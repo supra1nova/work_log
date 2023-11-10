@@ -1,0 +1,126 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: D2Coding;
+  font-size: 18px;
+}
+
+body {
+  margin: 0;
+}
+
+.header{
+  width: 100%;
+  height: 150px;
+  background-color: lightcoral ;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 50px;
+}
+
+.container {
+  width: 80%;
+  min-width: 800px;
+  margin: 0 auto 0;
+  padding: 50px 0 0
+}
+
+table {
+  width: 100%;
+}
+table, tr, th, td {
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+th, td {
+  height: 50px;
+}
+th {
+  background-color: #f5dddd;
+}
+td {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding: 5px;
+}
+
+.hover-table tr:not(th):hover {
+  background-color: #f7fdfd;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+input[type=text], input[type=password], select, textarea {
+  width: 100%;
+  height: 35px;
+  padding: 5px;
+  border: none;
+}
+
+input[type=text], input[type=password], textarea {
+  border: 1px solid lightgray;
+}
+
+textarea {
+  resize: none;
+  width: 100%;
+  height: 300px;
+}
+
+button {
+  background-color: ghostwhite;
+  min-width: 100px;
+  height: 30px;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0 5px;
+}
+button:hover{
+  background-color: white;
+  animation: ease;
+  animation-delay: 250ms;
+  /*border: 2px solid black;*/
+}
+
+.tc {
+ text-align: center;
+}
+.tr {
+ text-align: right;
+}
+.tl {
+ text-align: left;
+}
+
+.mb5{
+  margin-bottom: 5px;
+}
+.mb10{
+  margin-bottom: 10px;
+}
+.mb150{
+  margin-bottom: 150px;
+}
+
+.ellipsis-no-wrap{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.table-layout-fixed{
+  table-layout: fixed
+}
+
+input[type=checkbox][checked][disabled] {
+  background-color: dodgerblue;
+}
+
+.selected {
+  color: deepskyblue;
+}
