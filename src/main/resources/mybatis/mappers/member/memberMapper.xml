@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmw.kd.member.service.MemberMapper">
+  <sql id="searchClause">
+    <if test="searchKeyword != null and !''.equals(searchKeyword)">
+      <if test="searchCategory.equals('all')">
+        AND (
+          MEMBER_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+          OR MEMBER_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+          OR MEMBER_EMAIL LIKE CONCAT('%', #{searchKeyword}, '%')
+        )
+      </if>
+      <if test="searchCategory.equals('id')">
+        AND MEMBER_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+      </if>
+      <if test="searchCategory.equals('name')">
+        AND MEMBER_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+      </if>
+      <if test="searchCategory.equals('email')">
+        AND MEMBER_EMAIL LIKE CONCAT('%', #{searchKeyword}, '%')
+      </if>
+    </if>
+  </sql>
+
+  <select id="selectMemberListCount" resultType="int">
+    SELECT COUNT(MEMBER_SEQ)
+    FROM TB_MEMBER
+    <where>
+      <include refid="searchClause" />
+    </where>
+  </select>
+
+  <select id="selectMemberList" resultType="com.cmw.kd.member.model.MemberDto">
+    SELECT *
+    FROM TB_MEMBER
+    <where>
+      <include refid="searchClause" />
+    </where>
+    ORDER BY MEMBER_SEQ ASC
+    LIMIT #{pagination.rowNum}, #{pagination.listLimit}
+  </select>
+
+  <insert id="insertMember">
+    <selectKey keyProperty="memberSeq" resultType="int" order="BEFORE">
+      SELECT MAX(MEMBER_SEQ) + 1 FROM TB_MEMBER
+    </selectKey>
+    INSERT INTO TB_MEMBER (
+      MEMBER_SEQ
+      , MEMBER_ID
+      , MEMBER_PASSWORD
+      , MEMBER_NAME
+      , MEMBER_EMAIL
+      , MEMBER_REG_ID
+    )
+    VALUES(
+      #{memberSeq}
+      , #{memberId}
+      , #{memberPassword}
+      , #{memberName}
+      , #{memberEmail}
+      , #{memberRegId}
+    )
+  </insert>
+
+  <select id="selectMemberById" resultType="com.cmw.kd.member.model.MemberDto">
+    SELECT *
+    FROM TB_MEMBER
+    <where>
+      AND MEMBER_ID = #{memberId}
+      AND ACTIVE = 'Y'
+    </where>
+  </select>
+
+  <update id="updateMember">
+    UPDATE TB_MEMBER
+    SET
+      MEMBER_UPD_DATETIME = NOW()
+      <if test="memberName != null and !''.equals(memberName)">
+        , MEMBER_NAME = #{memberName}
+      </if>
+      <if test="memberEmail != null and !''.equals(memberEmail)">
+        , MEMBER_EMAIL = #{memberEmail}
+      </if>
+    <where>
+      AND MEMBER_SEQ = #{memberSeq}
+    </where>
+  </update>
+
+  <delete id="deleteMember">
+    UPDATE TB_MEMBER
+    SET
+      ACTIVE = 'N'
+    <where>
+      AND MEMBER_SEQ = #{memberSeq}
+    </where>
+  </delete>
+
+  <update id="updateMemberPassword">
+    UPDATE TB_MEMBER
+    SET
+      MEMBER_PASSWORD = #{memberPassword}
+    <where>
+      AND MEMBER_SEQ = #{memberSeq}
+    </where>
+  </update>
+</mapper>
