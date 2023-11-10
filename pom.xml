@@ -15,19 +15,24 @@
   <url>http://maven.apache.org</url>
   <properties>
     <java-version>17</java-version>
-    <spring-boot-starger-version>2.7.17</spring-boot-starger-version>
+    <spring-boot-starter-version>2.7.17</spring-boot-starter-version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-      <version>${spring-boot-starger-version}</version>
+      <version>${spring-boot-starter-version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
-      <version>${spring-boot-starger-version}</version>
+      <version>${spring-boot-starter-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+      <version>${spring-boot-starter-version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
@@ -73,7 +78,7 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${spring-boot-starger-version}</version>
+        <version>${spring-boot-starter-version}</version>
         <configuration>
           <excludes>
             <exclude>
