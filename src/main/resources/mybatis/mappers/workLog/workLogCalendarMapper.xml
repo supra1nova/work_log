@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmw.kd.workLog.service.WorkLogCalendarMapper">
+  <select id="selectWorkLogCalendarList" resultType="com.cmw.kd.workLog.model.WorkLogCalendarDto">
+    SELECT *
+    FROM TB_WORK_LOG_CALENDAR
+    <where>
+      AND ACTIVE = 'Y'
+      AND CAL_CODE = #{calCode}
+    </where>
+    ORDER BY CAL_DATE DESC
+  </select>
+
+  <insert id="insertWorkLogCalendar">
+    INSERT INTO TB_WORK_LOG_CALENDAR(
+        CAL_DATE
+      , CAL_CODE
+    ) VALUES(
+        #{calDate}
+      , #{calCode}
+    )
+  </insert>
+</mapper>
