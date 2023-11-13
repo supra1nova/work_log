@@ -2,5 +2,98 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="testMapper">
+<mapper namespace="com.cmw.kd.workLog.service.WorkLogMapper">
+  <sql id="searchClause">
+    <if test="searchKeyword != null and !''.equals(searchKeyword)">
+      <if test="searchCategory.equals('all')">
+        AND (
+        TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+        OR CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
+        OR REG_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+        )
+      </if>
+      <if test="searchCategory.equals('title')">
+        AND TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+      </if>
+      <if test="searchCategory.equals('content')">
+        AND CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
+      </if>
+      <if test="searchCategory.equals('id')">
+        AND REG_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+      </if>
+    </if>
+  </sql>
+
+  <select id="selectWorkLogListCount" parameterType="com.cmw.kd.core.dto.SearchDto" resultType="int">
+    SELECT COUNT(SEQ)
+    FROM TB_WORK_LOG
+    <where>
+      <include refid="searchClause" />
+      AND ACTIVE = 'Y'
+    </where>
+  </select>
+
+  <select id="selectWorkLogList" parameterType="com.cmw.kd.core.dto.SearchDto" resultType="com.cmw.kd.core.dto.CommonDto">
+    SELECT *
+    FROM TB_WORK_LOG
+    <where>
+      <include refid="searchClause" />
+      AND ACTIVE = 'Y'
+    </where>
+    ORDER BY SEQ DESC
+    LIMIT #{pagination.rowNum}, #{pagination.listLimit}
+  </select>
+
+    <insert id="insertWorkLog" useGeneratedKeys="true" keyProperty="seq">
+    INSERT INTO TB_WORK_LOG(
+      SEQ
+    , TITLE
+    , CONTENT
+    , REG_ID
+    ) VALUES (
+      #{seq}
+    , #{title}
+    , #{content}
+    , #{regId}
+    )
+  </insert>
+
+  <select id="selectWorkLog" parameterType="int" resultType="com.cmw.kd.core.dto.CommonDto">
+    SELECT *
+    FROM TB_WORK_LOG
+    <where>
+      AND SEQ = #{seq}
+      AND ACTIVE = 'Y'
+    </where>
+  </select>
+
+  <update id="updateWorkLog">
+    UPDATE TB_WORK_LOG
+    SET
+    UPD_DATETIME = NOW()
+    , UPD_ID = #{updId}
+    , TITLE = #{title}
+    , CONTENT = #{content}
+    WHERE SEQ = #{seq}
+  </update>
+
+  <update id="deleteWorkLog">
+    UPDATE TB_WORK_LOG
+    SET
+    ACTIVE = 'N'
+    <where>
+      AND SEQ = #{seq}
+    </where>
+  </update>
+
+  <update id="updateWorkLogOrdDep">
+    UPDATE TB_WORK_LOG
+    SET
+    ORD = ORD + 1
+    , UPD_DATETIME = NULL
+    <where>
+      AND GRP = #{grp}
+      AND ORD &gt; #{ord}
+    </where>
+  </update>
 </mapper>
