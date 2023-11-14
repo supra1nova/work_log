@@ -1,6 +1,7 @@
 package com.cmw.kd.workLog.model;
 
 import com.cmw.kd.core.utils.CommonUtils;
+import com.cmw.kd.core.utils.annotation.CustomBeforeOrPresent;
 import com.cmw.kd.core.utils.annotation.MultipartFileList;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.List;
 @ToString
 public class WorkLogDto {
   private Integer workLogSeq;
-  @NotBlank(message = "제목은 필수 입력 사항입니다")
+  @CustomBeforeOrPresent(message = "근무일 정보는 누락될 수 없습니다")
   private String workLogDate;
   @NotBlank(message = "본문 내용은 필수 입력 사항입니다")
   private String workLogContent;
