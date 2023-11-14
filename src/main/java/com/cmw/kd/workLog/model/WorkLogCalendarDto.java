@@ -10,12 +10,14 @@ import lombok.ToString;
 @ToString
 public class WorkLogCalendarDto {
   private String calDate;
+  private String calDayName;
   private String calMonth;
   private String regDatetime;
   private String regId;
   private String updDatetime;
   private String updId;
   private String active;
+  private String contentActive;
 
   public WorkCalendarVo toEntity() {
     return WorkCalendarVo.builder()
