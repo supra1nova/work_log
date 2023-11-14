@@ -66,15 +66,15 @@
 
   <table class="mb5 hover-table table-layout-fixed">
     <colgroup>
-      <col style="min-width: 50px; width: 50px">
+      <col style="min-width: 125px; width: 125px">
       <col style="min-width: 300px; width: 300px">
-      <col style="min-width: 150px; width: 150px">
-      <col style="min-width: 150px; width: 150px">
-      <col style="min-width: 150px; width: 150px">
+      <col style="min-width: 125px; width: 125px">
+      <col style="min-width: 125px; width: 125px">
+      <col style="min-width: 125px; width: 125px">
     </colgroup>
     <thead>
-      <th>No</th>
-      <th>제목</th>
+      <th>No.</th>
+      <th>근무일</th>
       <th>작성자</th>
       <th>작성일시</th>
       <th>수정일시</th>
@@ -84,16 +84,14 @@
         <c:if test="${item.active.equals('Y')}">
           <tr>
             <td class="tc">
-              <a href="${pageContext.request.contextPath}/work-log/view?seq=${item.seq}">${item.grp}</a>
+              <a href="${pageContext.request.contextPath}/work-log/view?workLogSeq=${item.workLogSeq}">${item.workLogSeq}</a>
+            </td><td class="tc">
+              <a href="${pageContext.request.contextPath}/work-log/view?workLogSeq=${item.workLogSeq}">${item.workLogDate}</a>
             </td>
-            <td class="ellipsis-no-wrap">
-              <a href="${pageContext.request.contextPath}/work-log/view?seq=${item.seq}">${item.title}
-              </a>
-            </td>
-            <td class="tc"><a href="${pageContext.request.contextPath}/work-log/view?seq=${item.seq}">${item.regId}</a></td>
-            <td class="tc"><a href="${pageContext.request.contextPath}/work-log/view?seq=${item.seq}">${item.regDatetime}</a></td>
+            <td class="tc"><a href="${pageContext.request.contextPath}/work-log/view?workLogSeq=${item.workLogSeq}">${item.regId}</a></td>
+            <td class="tc"><a href="${pageContext.request.contextPath}/work-log/view?workLogSeq=${item.workLogSeq}">${item.regDatetime}</a></td>
             <td class="tc">
-              <a href="${pageContext.request.contextPath}/work-log/view?seq=${item.seq}">
+              <a href="${pageContext.request.contextPath}/work-log/view?workLogSeq=${item.workLogSeq}">
                 <c:if test="${!empty item.updDatetime}">${item.updDatetime}</c:if>
                 <c:if test="${empty item.updDatetime}">-</c:if>
               </a>
@@ -128,6 +126,7 @@
 
   <div class="mb150 tr">
     <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/add'">새 글 작성</button>
+    <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log-calendar'">일일 보고 리스트 보기</button>
   </div>
 
 </div>

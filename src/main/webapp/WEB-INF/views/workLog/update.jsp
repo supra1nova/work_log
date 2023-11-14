@@ -48,13 +48,13 @@
           const toolbarContainer = $('#toolbar-container').get(0);
           toolbarContainer.appendChild( insEditor.ui.view.toolbar.element );
 
-          insEditor.setData(`${info.content}`)
+          insEditor.setData(`${info.workLogContent}`)
 
           $('#editor td:last-child').focus()
         })
 
       // save 버튼 이벤트
-      $('#saveBtn').on('click', () => saveData($('#editor').get(0).innerHTML))
+      $('#saveBtn').on('click', () => saveData("workLogContent", $('#editor').get(0).innerHTML))
     })
   </script>
 </head>
@@ -65,11 +65,7 @@
   <div>Simple  update page</div>
 
   <form method="post" action="${pageContext.request.contextPath}/work-log/update" spellcheck="false">
-    <input type="text" name="seq" value="${info.seq}" hidden readonly>
-
-    <div class="mb5">
-      <input type="text" name="Title" value="${info.title}" placeholder="제목을 입력해 주세요.">
-    </div>
+    <input type="text" name="workLogSeq" value="${info.workLogSeq}" hidden readonly>
 
     <div class="document-container">
       <div id="toolbar-container"></div>
@@ -83,8 +79,7 @@
 
     <div class="tr">
       <button type="button" class="custom-button" id="saveBtn">저장</button>
-      <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/view?seq=${info.seq}'">취소</button>
-      <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/list'">목록</button>
+      <button type="button" onclick="location.href=document.referrer">취소</button>
     </div>
   </form>
 </div>

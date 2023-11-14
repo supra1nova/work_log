@@ -48,7 +48,7 @@
           const toolbarContainer = $('#toolbar-container').get(0);
           toolbarContainer.appendChild( insEditor.ui.view.toolbar.element );
 
-          insEditor.setData(`${info.content}`)
+          insEditor.setData(`${info.workLogContent}`)
 
           // html 스펠 체크 해제 이벤트
           insEditor.editing.view.change( writer => {
@@ -67,8 +67,6 @@
     const deleteArticle = () => {
       const seq = $('input[name=seq]').val();
 
-      console.log(seq);
-
       const beforeSend = () => {
         if(!confirm("현재 글을 삭제 할까요?")){
           return false;
@@ -76,7 +74,7 @@
       }
       const ajaxOptions = {
         url: '/work-log/delete',
-        data: JSON.stringify({seq: seq}),
+        data: JSON.stringify({workLogSeq: seq}),
         contentType: 'application/json',
         dataType: 'json',
         beforeSend: beforeSend,
@@ -103,7 +101,7 @@
 <div class="container">
   <div>Work-log view page</div>
 
-  <input type="text" name="seq" value="${info.seq}" hidden readonly>
+  <input type="text" name="seq" value="${info.workLogSeq}" hidden readonly>
 
   <div style="display: flex; justify-content: space-between">
     <div>
@@ -124,9 +122,10 @@
   </div>
 
   <div class="tr mb150" >
-    <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/update?seq=${info.seq}'">수정</button>
+    <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/update?seq=${info.workLogSeq}'">수정</button>
     <button type="button" id="deleteBtn">삭제</button>
-    <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/list'">목록</button>
+<%--    <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/list'">목록</button>--%>
+    <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log-calendar/list'">목록</button>
   </div>
 </div>
 </body>

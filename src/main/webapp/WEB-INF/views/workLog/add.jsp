@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
   <title>Work log add</title>
@@ -59,7 +60,7 @@
         })
 
       // save 버튼 이벤트
-      $('#saveBtn').on('click', () => saveData($('#editor').get(0).innerHTML))
+      $('#saveBtn').on('click', () => saveData("workLogContent", $('#editor').get(0).innerHTML))
     })
 
     let testArea = `<p>
@@ -92,8 +93,8 @@
             <td rowspan="2" style="background-color: white; text-align: center"></td>
           </tr>
           <tr style="text-align: center; height: 100%">
-            <th style="text-align: center; background-color: darkgrey">작성일</th>
-            <td style="background-color: white; text-align: center">\${new Date().getFullYear() + '년 ' + (new Date().getMonth() + 1) + '월 ' + new Date().getDate() + '일'}</td>
+            <th style="text-align: center; background-color: darkgrey">근무일</th>
+            <td style="background-color: white; text-align: center">\${new Date('${info.workLogDate}').getFullYear() + '년 ' + (new Date('${info.workLogDate}').getMonth() + 1) + '월 ' + new Date('${info.workLogDate}').getDate() + '일'}</td>
           </tr>
         </thead>
         <tbody>
@@ -112,10 +113,6 @@
   <div>Work log add page</div>
 
   <form method="post">
-    <div class="mb5">
-      <input type="text" style="border-radius: 5px" name="title" placeholder="제목을 입력해 주세요.">
-    </div>
-
     <div class="document-container">
       <div id="toolbar-container"></div>
 
