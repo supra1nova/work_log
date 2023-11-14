@@ -1,13 +1,12 @@
 package com.cmw.kd.workLog.service;
 
-import com.cmw.kd.core.dto.CommonDto;
 import com.cmw.kd.core.dto.SearchDto;
+import com.cmw.kd.workLog.model.WorkLogDto;
+import com.cmw.kd.workLog.model.WorkLogDto.WorkLogVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static com.cmw.kd.core.dto.CommonDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -18,29 +17,29 @@ public class WorkLogService {
     return workLogMapper.selectWorkLogListCount(searchDto);
   }
 
-  public List<CommonDto> selectWorkLogList(SearchDto searchDto){
+  public List<WorkLogDto> selectWorkLogList(SearchDto searchDto){
     return workLogMapper.selectWorkLogList(searchDto);
   }
 
-  public void insertWorkLog(CommonDto commonDto){
-    commonDto.setMemberInfo();
+  public void insertWorkLog(WorkLogDto workLogDto){
+    workLogDto.setMemberInfo();
 
-    CommonVo commonVo = commonDto.toEntity();
-    workLogMapper.insertWorkLog(commonVo);
+    WorkLogVo workLogVo = workLogDto.toEntity();
+    workLogMapper.insertWorkLog(workLogVo);
 
-    commonDto.setSeq(commonVo.getSeq());
+    workLogDto.setWorkLogSeq(workLogVo.getWorkLogSeq());
   }
 
-  public CommonDto selectWorkLog(Integer seq){
-    return workLogMapper.selectWorkLog(seq);
+  public WorkLogDto selectWorkLog(Integer workLogSeq){
+    return workLogMapper.selectWorkLog(workLogSeq);
   }
 
-  public void updateWorkLog(CommonDto commonDto){
-    commonDto.setMemberInfo();
-    workLogMapper.updateWorkLog(commonDto.toEntity());
+  public void updateWorkLog(WorkLogDto workLogDto){
+    workLogDto.setMemberInfo();
+    workLogMapper.updateWorkLog(workLogDto.toEntity());
   }
 
-  public void deleteWorkLog(CommonDto commonDto){
-    workLogMapper.deleteWorkLog(commonDto.toEntity());
+  public void deleteWorkLog(WorkLogDto workLogDto){
+    workLogMapper.deleteWorkLog(workLogDto.toEntity());
   }
 }

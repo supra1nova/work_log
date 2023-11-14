@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 public class WorkLogCalendarDto {
   private String calDate;
-  private String calCode;
+  private String calMonth;
   private String regDatetime;
   private String regId;
   private String updDatetime;
@@ -20,7 +20,7 @@ public class WorkLogCalendarDto {
   public WorkCalendarVo toEntity() {
     return WorkCalendarVo.builder()
       .calDate(calDate)
-      .calCode(calCode)
+      .calMonth(calMonth)
       .regDatetime(regDatetime)
       .regId(regId)
       .updDatetime(updDatetime)
@@ -34,7 +34,7 @@ public class WorkLogCalendarDto {
   @ToString
   public static class WorkCalendarVo {
     private String calDate;
-    private String calCode;
+    private String calMonth;
     private String regDatetime;
     private String regId;
     private String updDatetime;

@@ -4,6 +4,7 @@ import com.cmw.kd.core.dto.CommonDto;
 import com.cmw.kd.core.dto.ResponseDto;
 import com.cmw.kd.core.dto.SearchDto;
 import com.cmw.kd.file.service.FileService;
+import com.cmw.kd.workLog.model.WorkLogDto;
 import com.cmw.kd.workLog.service.WorkLogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +29,9 @@ public class WorkLogController {
     int listCount = workLogService.selectWorkLogListCount(searchDto);
     searchDto.setListCount(listCount);
 
-    List<CommonDto> commonDtoList = workLogService.selectWorkLogList(searchDto);
+    List<WorkLogDto> workLogDtoList = workLogService.selectWorkLogList(searchDto);
 
-    model.addAttribute("list", commonDtoList);
+    model.addAttribute("list", workLogDtoList);
     model.addAttribute("pagination", searchDto.getPagination());
 
     return "workLog/list";
@@ -38,29 +39,29 @@ public class WorkLogController {
 
   @GetMapping("/view")
   public String getWorkLog(Integer seq, Model model){
-    CommonDto commonDto = workLogService.selectWorkLog(seq);
-    model.addAttribute("info", commonDto);
+    WorkLogDto workLogDto = workLogService.selectWorkLog(seq);
+    model.addAttribute("info", workLogDto);
     return "workLog/view";
   }
 
   @GetMapping("/add")
   public String addWorkLog(Model model){
-    CommonDto commonDto = new CommonDto();
-    commonDto.setMemberInfo();
+    WorkLogDto workLogDto = new WorkLogDto();
+    workLogDto.setMemberInfo();
 
-    model.addAttribute("info", commonDto);
+    model.addAttribute("info", workLogDto);
     return "workLog/add";
   }
 
   @PostMapping("/add")
   @ResponseBody
-  public ResponseDto<?> addWorkLogProc(@Valid @ModelAttribute CommonDto commonDto){
-//  public ResponseDto<?> addWorkLogProc(@ModelAttribute CommonDto commonDto){
+  public ResponseDto<?> addWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto){
+//  public ResponseDto<?> addWorkLogProc(@ModelAttribute WorkLogDto workLogDto){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
 
     try {
-      workLogService.insertWorkLog(commonDto);
+      workLogService.insertWorkLog(workLogDto);
       result = true;
     } catch (Exception e) {
       log.error(e.getMessage());
@@ -71,24 +72,24 @@ public class WorkLogController {
       description = "게시물이 성공적으로 등록되었습니다";
     }
 
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?seq=" + commonDto.getSeq() + "'").build();
+    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?seq=" + workLogDto.getWorkLogSeq() + "'").build();
   }
 
   @GetMapping("/update")
   public String updateWorkLog(Integer seq, Model model){
-    CommonDto commonDto = workLogService.selectWorkLog(seq);
-    model.addAttribute("info", commonDto);
+    WorkLogDto workLogDto = workLogService.selectWorkLog(seq);
+    model.addAttribute("info", workLogDto);
     return "workLog/update";
   }
 
   @PostMapping("/update")
   @ResponseBody
-  public ResponseDto<?> updateWorkLogProc(@Valid @ModelAttribute CommonDto commonDto){
+  public ResponseDto<?> updateWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
 
     try {
-      workLogService.updateWorkLog(commonDto);
+      workLogService.updateWorkLog(workLogDto);
       result = true;
     } catch (Exception e) {
       log.error(e.getMessage());
@@ -99,17 +100,17 @@ public class WorkLogController {
       description = "게시물이 성공적으로 등록되었습니다";
     }
 
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?seq=" + commonDto.getSeq() + "'").build();
+    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?seq=" + workLogDto.getWorkLogSeq() + "'").build();
   }
 
   @PostMapping("/delete")
   @ResponseBody
-  public ResponseDto<?> deleteWorkLogProc(@RequestBody CommonDto commonDto){
+  public ResponseDto<?> deleteWorkLogProc(@RequestBody WorkLogDto workLogDto){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
 
     try {
-      workLogService.deleteWorkLog(commonDto);
+      workLogService.deleteWorkLog(workLogDto);
       result = true;
     } catch (Exception e) {
       log.error(e.getMessage());

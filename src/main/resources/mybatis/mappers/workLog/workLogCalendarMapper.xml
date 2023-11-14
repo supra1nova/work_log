@@ -8,7 +8,7 @@
     FROM TB_WORK_LOG_CALENDAR
     <where>
       AND ACTIVE = 'Y'
-      AND CAL_CODE = #{calCode}
+      AND CAL_MONTH = #{calMonth}
     </where>
     ORDER BY CAL_DATE DESC
   </select>
@@ -16,10 +16,10 @@
   <insert id="insertWorkLogCalendar">
     INSERT INTO TB_WORK_LOG_CALENDAR(
         CAL_DATE
-      , CAL_CODE
+      , CAL_MONTH
     ) VALUES(
         #{calDate}
-      , #{calCode}
+      , #{calMonth}
     )
   </insert>
 </mapper>

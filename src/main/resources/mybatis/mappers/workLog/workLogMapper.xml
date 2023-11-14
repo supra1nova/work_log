@@ -7,16 +7,16 @@
     <if test="searchKeyword != null and !''.equals(searchKeyword)">
       <if test="searchCategory.equals('all')">
         AND (
-        TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
-        OR CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
+        WORK_LOG_DATE LIKE CONCAT('%', #{searchKeyword}, '%')
+        OR WORK_LOG_CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
         OR REG_ID LIKE CONCAT('%', #{searchKeyword}, '%')
         )
       </if>
-      <if test="searchCategory.equals('title')">
-        AND TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+      <if test="searchCategory.equals('workLogDate')">
+        AND WORK_LOG_DATE LIKE CONCAT('%', #{searchKeyword}, '%')
       </if>
-      <if test="searchCategory.equals('content')">
-        AND CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
+      <if test="searchCategory.equals('workLogContent')">
+        AND WORK_LOG_CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
       </if>
       <if test="searchCategory.equals('id')">
         AND REG_ID LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -25,7 +25,7 @@
   </sql>
 
   <select id="selectWorkLogListCount" parameterType="com.cmw.kd.core.dto.SearchDto" resultType="int">
-    SELECT COUNT(SEQ)
+    SELECT COUNT(WORK_LOG_SEQ)
     FROM TB_WORK_LOG
     <where>
       <include refid="searchClause" />
@@ -33,36 +33,36 @@
     </where>
   </select>
 
-  <select id="selectWorkLogList" parameterType="com.cmw.kd.core.dto.SearchDto" resultType="com.cmw.kd.core.dto.CommonDto">
+  <select id="selectWorkLogList" parameterType="com.cmw.kd.core.dto.SearchDto" resultType="com.cmw.kd.workLog.model.WorkLogDto">
     SELECT *
     FROM TB_WORK_LOG
     <where>
       <include refid="searchClause" />
       AND ACTIVE = 'Y'
     </where>
-    ORDER BY SEQ DESC
+    ORDER BY WORK_LOG_SEQ DESC
     LIMIT #{pagination.rowNum}, #{pagination.listLimit}
   </select>
 
-    <insert id="insertWorkLog" useGeneratedKeys="true" keyProperty="seq">
+    <insert id="insertWorkLog" useGeneratedKeys="true" keyProperty="workLogSeq">
     INSERT INTO TB_WORK_LOG(
-      SEQ
-    , TITLE
-    , CONTENT
+      WORK_LOG_SEQ
+    , WORK_LOG_DATE
+    , WORK_LOG_CONTENT
     , REG_ID
     ) VALUES (
-      #{seq}
-    , #{title}
-    , #{content}
+      #{workLogSeq}
+    , #{workLogDate}
+    , #{workLogContent}
     , #{regId}
     )
   </insert>
 
-  <select id="selectWorkLog" parameterType="int" resultType="com.cmw.kd.core.dto.CommonDto">
+  <select id="selectWorkLog" parameterType="int" resultType="com.cmw.kd.workLog.model.WorkLogDto">
     SELECT *
     FROM TB_WORK_LOG
     <where>
-      AND SEQ = #{seq}
+      AND WORK_LOG_SEQ = #{workLogSeq}
       AND ACTIVE = 'Y'
     </where>
   </select>
@@ -72,9 +72,9 @@
     SET
     UPD_DATETIME = NOW()
     , UPD_ID = #{updId}
-    , TITLE = #{title}
-    , CONTENT = #{content}
-    WHERE SEQ = #{seq}
+    , WORK_LOG_DATE = #{workLogDate}
+    , WORK_LOG_CONTENT = #{workLogContent}
+    WHERE WORK_LOG_SEQ = #{workLogSeq}
   </update>
 
   <update id="deleteWorkLog">
@@ -82,18 +82,7 @@
     SET
     ACTIVE = 'N'
     <where>
-      AND SEQ = #{seq}
-    </where>
-  </update>
-
-  <update id="updateWorkLogOrdDep">
-    UPDATE TB_WORK_LOG
-    SET
-    ORD = ORD + 1
-    , UPD_DATETIME = NULL
-    <where>
-      AND GRP = #{grp}
-      AND ORD &gt; #{ord}
+      AND WORK_LOG_SEQ = #{workLogSeq}
     </where>
   </update>
 </mapper>

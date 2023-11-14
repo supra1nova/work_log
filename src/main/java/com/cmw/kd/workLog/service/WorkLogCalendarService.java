@@ -18,9 +18,9 @@ public class WorkLogCalendarService {
 
   // TODO: calendar list 가져옴
   public List<WorkLogCalendarDto> selectWorkLogCalendarList(WorkLogCalendarDto workLogCalendarDto) {
-    if(Objects.isNull(workLogCalendarDto) || StringUtils.isBlank(workLogCalendarDto.getCalCode())){
+    if(Objects.isNull(workLogCalendarDto) || StringUtils.isBlank(workLogCalendarDto.getCalMonth())){
       workLogCalendarDto = new WorkLogCalendarDto();
-      workLogCalendarDto.setCalCode(LocalDate.now().withDayOfMonth(1).toString().substring(0, 7));
+      workLogCalendarDto.setCalMonth(LocalDate.now().withDayOfMonth(1).toString().substring(0, 7));
     }
     return workLogCalendarMapper.selectWorkLogCalendarList(workLogCalendarDto.toEntity());
   }
@@ -43,7 +43,7 @@ public class WorkLogCalendarService {
 
       WorkLogCalendarDto workLogCalendarDto = new WorkLogCalendarDto();
       workLogCalendarDto.setCalDate(saveDate.toString());
-      workLogCalendarDto.setCalCode(saveDate.toString().substring(0, 7));
+      workLogCalendarDto.setCalMonth(saveDate.toString().substring(0, 7));
 
       insertWorkLogCalendar(workLogCalendarDto);
     }
