@@ -17,7 +17,11 @@ public interface WorkLogMapper {
 
   WorkLogDto selectWorkLog(Integer seq);
 
+  WorkLogDto selectWorkLogByCalDate(WorkLogVo workLogVo);
+
   void updateWorkLog(WorkLogVo commonVo);
 
   void deleteWorkLog(WorkLogVo commonVo);
+
+  void deleteWorkLogByCalDate(WorkLogVo commonVo);
 }

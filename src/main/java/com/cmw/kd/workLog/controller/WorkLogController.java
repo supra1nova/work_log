@@ -11,10 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Controller
@@ -38,15 +42,21 @@ public class WorkLogController {
   }
 
   @GetMapping("/view")
-  public String getWorkLog(Integer seq, Model model){
-    WorkLogDto workLogDto = workLogService.selectWorkLog(seq);
+  public String getWorkLog(Integer workLogSeq, Model model){
+    WorkLogDto workLogDto = workLogService.selectWorkLog(workLogSeq);
     model.addAttribute("info", workLogDto);
     return "workLog/view";
   }
 
+  @GetMapping("/view-by-cal-date")
+  public String getWorkLogByCalDate(@ModelAttribute WorkLogDto workLogDto, Model model){
+    WorkLogDto result = workLogService.selectWorkLogByCalDate(workLogDto);
+    model.addAttribute("info", result);
+    return "workLog/view";
+  }
+
   @GetMapping("/add")
-  public String addWorkLog(Model model){
-    WorkLogDto workLogDto = new WorkLogDto();
+  public String addWorkLog(@ModelAttribute WorkLogDto workLogDto, Model model){
     workLogDto.setMemberInfo();
 
     model.addAttribute("info", workLogDto);
@@ -55,10 +65,20 @@ public class WorkLogController {
 
   @PostMapping("/add")
   @ResponseBody
-  public ResponseDto<?> addWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto){
+  public ResponseDto<?> addWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto, BindingResult errors){
 //  public ResponseDto<?> addWorkLogProc(@ModelAttribute WorkLogDto workLogDto){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
+
+    if(errors.hasErrors()){
+      final String prefix = "invalid_";
+
+      Map<String, String> errorMap = new ConcurrentHashMap<>();
+      for(FieldError error : errors.getFieldErrors()){
+        errorMap.put(String.format(prefix + "%s", error.getField()), error.getDefaultMessage());
+      }
+      return ResponseDto.builder().result(result).description(description).invalidMessage(errorMap).build();
+    }
 
     try {
       workLogService.insertWorkLog(workLogDto);
@@ -72,7 +92,8 @@ public class WorkLogController {
       description = "게시물이 성공적으로 등록되었습니다";
     }
 
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?seq=" + workLogDto.getWorkLogSeq() + "'").build();
+//    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?workLogSeq=" + workLogDto.getWorkLogSeq() + "'").build();
+    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view-by-cal-date?workLogDate=" + workLogDto.getWorkLogDate() + "'").build();
   }
 
   @GetMapping("/update")
@@ -82,11 +103,28 @@ public class WorkLogController {
     return "workLog/update";
   }
 
+  @GetMapping("/update-by-cal-date")
+  public String updateWorkLogByCalDate(@ModelAttribute WorkLogDto workLogDto, Model model){
+    WorkLogDto result = workLogService.selectWorkLogByCalDate(workLogDto);
+    model.addAttribute("info", result);
+    return "workLog/update";
+  }
+
   @PostMapping("/update")
   @ResponseBody
-  public ResponseDto<?> updateWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto){
+  public ResponseDto<?> updateWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto, BindingResult errors){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
+
+    if(errors.hasErrors()){
+      final String prefix = "invalid_";
+
+      Map<String, String> errorMap = new ConcurrentHashMap<>();
+      for(FieldError error : errors.getFieldErrors()){
+        errorMap.put(String.format(prefix + "%s", error.getField()), error.getDefaultMessage());
+      }
+      return ResponseDto.builder().result(result).description(description).invalidMessage(errorMap).build();
+    }
 
     try {
       workLogService.updateWorkLog(workLogDto);
@@ -121,7 +159,28 @@ public class WorkLogController {
       description = "게시물이 성공적으로 삭제되었습니다";
     }
 
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log'").build();
+    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log-calendar/list'").build();
+  }
+
+  @PostMapping("/delete-by-cal-date")
+  @ResponseBody
+  public ResponseDto<?> deleteWorkLogProcByCalDate(@RequestBody WorkLogDto workLogDto){
+    boolean result = false;
+    String description = "게시물 등록에 실패했습니다";
+
+    try {
+      workLogService.deleteWorkLogByCalDate(workLogDto);
+      result = true;
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      description = e.getMessage();
+    }
+
+    if (result) {
+      description = "게시물이 성공적으로 삭제되었습니다";
+    }
+
+    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log-calendar/list'").build();
   }
 
   @PostMapping("/add-image")
