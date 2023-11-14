@@ -45,6 +45,9 @@ public class WorkLogCalendarService {
       workLogCalendarDto.setCalDate(saveDate.toString());
       workLogCalendarDto.setCalMonth(saveDate.toString().substring(0, 7));
 
+      String active = saveDate.getDayOfWeek().getValue() < 6 ? "Y" : "N";
+      workLogCalendarDto.setActive(active);
+
       insertWorkLogCalendar(workLogCalendarDto);
     }
   }
