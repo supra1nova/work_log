@@ -64,29 +64,55 @@
       <c:set var="today" value="<%=new java.util.Date()%>" />
       <fmt:formatDate var="currDate" value="${today}" pattern="yyyy-MM-dd" />
 
-      <%-- 일반 STAFF 의 경우 진행 --%>
-      <c:forEach items="${list}" var="item">
-        <c:if test="${currDate >= item.calDate}">
-          <div style="display: flex; justify-content: left; margin-bottom: 10px;">
-            <div class="day-article" style="width: 82%; border: 1px solid darkgrey; min-width: 60%; display: flex; justify-content: space-between; padding: 0; <c:if test="${!empty item.contentActive}"> cursor: pointer; </c:if> " <c:if test="${!empty item.contentSeq}"> onclick="location.href='/work-log/view?workLogSeq=${item.contentSeq}'" </c:if> >
-              <span style="padding-left: 20px; <c:if test="${item.calDayName.equals('토') || item.calDayName.equals('일')}">color: red</c:if>" >${item.calDate} ${item.calDayName} <c:if test="${empty item.contentSeq}">${item.contentRegName}</c:if></span>
-              <c:if test="${!(item.calDayName.equals('토') || item.calDayName.equals('일')) && !empty item.contentSeq}"><span style="padding-right: 20px;" >${item.contentRegName}</span></c:if>
-            </div>
-            <div style="width: 250px; margin: auto 0">
-              <%-- TODO: 관리자 계정의 경우 휴일로 전환 버튼 보이기 --%>
-              <c:if test="${item.active.equals('Y')}">
-                <c:if test="${empty item.contentActive && currDate >= item.calDate}">
-                  <button type="button" onclick="location.href='/work-log/add?workLogDate=${item.calDate}'" style="background-color: #e3efff; margin-left: 5px">등록</button>
+      <c:if test="${empty role}">
+        <%-- 일반 STAFF 의 경우 진행 --%>
+        <c:forEach items="${list}" var="item">
+          <c:if test="${currDate >= item.calDate}">
+            <div style="display: flex; justify-content: left; margin-bottom: 10px;">
+              <div class="day-article" style="width: 82%; border: 1px solid darkgrey; min-width: 60%; display: flex; justify-content: space-between; padding: 0; <c:if test="${!empty item.contentActive}"> cursor: pointer; </c:if> " <c:if test="${!empty item.contentSeq}"> onclick="location.href='/work-log/view?workLogSeq=${item.contentSeq}'" </c:if> >
+                <span style="padding-left: 20px; <c:if test="${item.calDayName.equals('토') || item.calDayName.equals('일')}">color: red</c:if>" >${item.calDate} ${item.calDayName} <c:if test="${empty item.contentSeq}">${item.contentRegName}</c:if></span>
+                <c:if test="${!(item.calDayName.equals('토') || item.calDayName.equals('일')) && !empty item.contentSeq}"><span style="padding-right: 20px;" >${item.contentRegName}</span></c:if>
+              </div>
+              <div style="width: 250px; margin: auto 0">
+                <%-- TODO: 관리자 계정의 경우 휴일로 전환 버튼 보이기 --%>
+                <c:if test="${item.active.equals('Y')}">
+                  <c:if test="${empty item.contentActive && currDate >= item.calDate}">
+                    <button type="button" onclick="location.href='/work-log/add?workLogDate=${item.calDate}'" style="background-color: #e3efff; margin-left: 5px">등록</button>
+                  </c:if>
+                  <c:if test="${!empty item.contentActive && !item.contentActive.equals('N')}">
+                    <button type="button" onclick="location.href='/work-log/update?workLogSeq=${item.contentSeq}'" style="background-color: #ffffec; margin-left: 5px">수정</button>
+                    <button type="button" onclick="deleteArticle('${item.contentSeq}')" style="background-color: #faf0f0; margin-left: 5px">삭제</button>
+                  </c:if>
                 </c:if>
-                <c:if test="${!empty item.contentActive && !item.contentActive.equals('N')}">
-                  <button type="button" onclick="location.href='/work-log/update?workLogSeq=${item.contentSeq}'" style="background-color: #ffffec; margin-left: 5px">수정</button>
-                  <button type="button" onclick="deleteArticle('${item.contentSeq}')" style="background-color: #faf0f0; margin-left: 5px">삭제</button>
-                </c:if>
-              </c:if>
+              </div>
             </div>
-          </div>
-        </c:if>
-      </c:forEach>
+          </c:if>
+        </c:forEach>
+      </c:if>
+
+      <c:if test="${!empty role}">
+        <%-- 일반 STAFF 의 경우 진행 --%>
+        <c:forEach items="${calendarList}" var="item">
+          <c:if test="${currDate >= item.calDate}">
+            <div style="display: flex; justify-content: left; margin-bottom: 10px;">
+              <div class="day-article" style="width: 100%; border: 1px solid darkgrey; min-width: 60%; display: flex; justify-content: space-between; padding: 0; " >
+                <div style="width: 300px; padding-left: 20px; <c:if test="${item.calDayName.equals('토') || item.calDayName.equals('일')}">color: red</c:if>" >${item.calDate} ${item.calDayName} </div>
+                <div>
+                  <c:forEach items="${list}" var="listItem">
+                    <c:if test="${item.calDate.equals(listItem.calDate)}">
+                      <div
+                        <c:if test="${empty listItem.contentSeq}">style="color: red" </c:if>
+                        <c:if test="${!empty listItem.contentSeq}">style="color: green; cursor: pointer;" onclick="location.href='/work-log/view?workLogSeq=${listItem.contentSeq}'" </c:if>
+                      >${listItem.contentRegName}</div>
+                    </c:if>
+                  </c:forEach>
+                </div>
+              </div>
+            </div>
+          </c:if>
+        </c:forEach>
+      </c:if>
+
     </div>
   </div>
 

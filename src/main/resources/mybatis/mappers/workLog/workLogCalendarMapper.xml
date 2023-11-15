@@ -4,6 +4,12 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cmw.kd.workLog.service.WorkLogCalendarMapper">
   <select id="selectWorkLogCalendarList" resultType="com.cmw.kd.workLog.model.WorkLogCalendarDto">
+    SELECT * FROM TB_WORK_LOG_CALENDAR
+    WHERE CAL_MONTH = #{calMonth}
+    ORDER BY CAL_DATE DESC
+  </select>
+
+  <select id="selectWorkLogAndCalendarList" resultType="com.cmw.kd.workLog.model.WorkLogCalendarDto">
     SELECT TWLC.*, TM1.MEMBER_ID AS CONTENT_REG_ID, TM1.MEMBER_NAME AS CONTENT_REG_NAME, TWL.WORK_LOG_SEQ AS CONTENT_SEQ, TWL.ACTIVE AS CONTENT_ACTIVE FROM (
         SELECT * FROM TB_WORK_LOG_CALENDAR
         WHERE CAL_MONTH = #{calMonth}
