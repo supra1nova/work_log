@@ -72,7 +72,7 @@
       <c:forEach items="${list}" var="item">
         <c:if test="${currDate >= item.calDate}">
           <div style="display: flex; justify-content: left; margin-bottom: 10px;">
-            <div class="day-article" style="width: 82%; border: 1px solid darkgrey; min-width: 60%; <c:if test="${!empty item.contentActive}"> cursor: pointer; </c:if> " onclick="location.href='/work-log/view?workLogSeq=${item.contentSeq}'">
+            <div class="day-article" style="width: 82%; border: 1px solid darkgrey; min-width: 60%; <c:if test="${!empty item.contentActive}"> cursor: pointer; </c:if> " <c:if test="${!empty item.contentSeq}"> onclick="location.href='/work-log/view?workLogSeq=${item.contentSeq}'" </c:if> >
               <span style="padding-left: 20px; <c:if test="${item.calDayName.equals('토') || item.calDayName.equals('일')}">color: red</c:if>" >${item.calDate} ${item.calDayName}</span>
             </div>
             <div style="width: 250px; margin: auto 0">
