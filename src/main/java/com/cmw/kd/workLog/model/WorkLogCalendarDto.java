@@ -20,6 +20,7 @@ public class WorkLogCalendarDto {
   private String updDatetime;
   private String updId;
   private String active;
+  private String contentSeq;
   private String contentActive;
   private String contentRegId;
   private String contentRegName;
