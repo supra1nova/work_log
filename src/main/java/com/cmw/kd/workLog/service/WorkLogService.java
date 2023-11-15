@@ -35,7 +35,7 @@ public class WorkLogService {
   }
 
   public WorkLogDto selectWorkLogByCalDate(WorkLogDto workLogDto){
-    workLogDto.setMemberInfo();
+//    workLogDto.setMemberInfo();
     return workLogMapper.selectWorkLogByCalDate(workLogDto.toEntity());
   }
 
@@ -49,7 +49,7 @@ public class WorkLogService {
   }
 
   public void deleteWorkLogByCalDate(WorkLogDto workLogDto){
-    workLogDto.setMemberInfo();
+//    workLogDto.setMemberInfo();
     workLogMapper.deleteWorkLogByCalDate(workLogDto.toEntity());
   }
 }

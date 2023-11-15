@@ -21,6 +21,8 @@ public class WorkLogCalendarDto {
   private String updId;
   private String active;
   private String contentActive;
+  private String contentRegId;
+  private String contentRegName;
 
   public WorkCalendarVo toEntity() {
     return WorkCalendarVo.builder()

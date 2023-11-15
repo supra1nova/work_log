@@ -93,7 +93,8 @@ public class WorkLogController {
     }
 
 //    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?workLogSeq=" + workLogDto.getWorkLogSeq() + "'").build();
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view-by-cal-date?workLogDate=" + workLogDto.getWorkLogDate() + "'").build();
+//    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view-by-cal-date?workLogDate=" + workLogDto.getWorkLogDate() + "'").build();
+    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view-by-cal-date?workLogDate=" + workLogDto.getWorkLogDate() + "&regId=" + workLogDto.getRegId() + "'").build();
   }
 
   @GetMapping("/update")
