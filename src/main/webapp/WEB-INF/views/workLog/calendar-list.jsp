@@ -12,6 +12,11 @@
 <head>
   <title>Simple  list</title>
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .day-article:hover{
+      background-color: #f5dddd;
+    }
+  </style>
   <script src="/js/libs/jquery-3.7.0.min.js"></script>
   <script src="/js/common/common.js"></script>
   <script>
@@ -62,32 +67,38 @@
       <c:set var="today" value="<%=new java.util.Date()%>" />
       <c:forEach items="${list}" var="item">
         <%-- TODO: WorkLog 정보 가져와서 각 날짜에 해당하는 데이터 있는지 여부 확인 후 분기 -> 없어서 작성 또는 있으므로 수정/삭제 --%>
-        <div style="display: flex; justify-content: left">
-          <div style="width: 82%; border: 1px solid darkgrey; min-width: 60%;">
-            <span style="<c:if test="${item.calDayName.equals('토') || item.calDayName.equals('일')}">color: red</c:if>" >
-              <c:if test="${!empty item.contentActive}">
-                <a href="/work-log/view-by-cal-date?workLogDate=${item.calDate}">
+        <c:if test="${!empty item.contentActive}">
+          <a href="/work-log/view-by-cal-date?workLogDate=${item.calDate}">
+        </c:if>
+          <div style="display: flex; justify-content: left; margin-bottom: 10px;">
+            <div class="day-article" style="width: 82%; border: 1px solid darkgrey; min-width: 60%;">
+              <span style="padding-left: 20px; <c:if test="${item.calDayName.equals('토') || item.calDayName.equals('일')}">color: red</c:if>" >
+  <%--              <c:if test="${!empty item.contentActive}">--%>
+  <%--                <a href="/work-log/view-by-cal-date?workLogDate=${item.calDate}">--%>
+  <%--              </c:if>--%>
+                  ${item.calDate} ${item.calDayName}
+  <%--              <c:if test="${!empty item.contentActive}">--%>
+  <%--                </a>--%>
+  <%--              </c:if>--%>
+              </span>
+            </div>
+            <div style="width: 220px; margin: auto 0">
+              <%-- TODO: 관리자 계정의 경우 휴일로 전환 버튼 보이기 --%>
+              <c:if test="${item.active.equals('Y')}">
+                <fmt:formatDate var="currDate" value="${today}" pattern="yyyy-MM-dd" />
+                <c:if test="${empty item.contentActive && currDate >= item.calDate}">
+                  <button type="button" onclick="location.href='/work-log/add?workLogDate=${item.calDate}'">등록</button>
+                </c:if>
+                <c:if test="${!empty item.contentActive && !item.contentActive.equals('N')}">
+                  <button type="button" onclick="location.href='/work-log/update-by-cal-date?workLogDate=${item.calDate}'">수정</button>
+                  <button type="button" onclick="deleteArticle()" data-work-log-date="${item.calDate}">삭제</button>
+                </c:if>
               </c:if>
-                ${item.calDate} ${item.calDayName}
-              <c:if test="${!empty item.contentActive}">
-                </a>
-              </c:if>
-            </span>
+            </div>
           </div>
-          <div style="width: 220px; margin: auto 0">
-            <%-- TODO: 관리자 계정의 경우 휴일로 전환 버튼 보이기 --%>
-            <c:if test="${item.active.equals('Y')}">
-              <fmt:formatDate var="currDate" value="${today}" pattern="yyyy-MM-dd" />
-              <c:if test="${empty item.contentActive && currDate >= item.calDate}">
-                <button type="button" onclick="location.href='/work-log/add?workLogDate=${item.calDate}'">등록</button>
-              </c:if>
-              <c:if test="${!empty item.contentActive && !item.contentActive.equals('N')}">
-                <button type="button" onclick="location.href='/work-log/update-by-cal-date?workLogDate=${item.calDate}'">수정</button>
-                <button type="button" onclick="deleteArticle()" data-work-log-date="${item.calDate}">삭제</button>
-              </c:if>
-            </c:if>
-          </div>
-        </div>
+        <c:if test="${!empty item.contentActive}">
+          </a>
+        </c:if>
       </c:forEach>
     </div>
   </div>
