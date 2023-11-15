@@ -98,8 +98,8 @@ public class WorkLogController {
   }
 
   @GetMapping("/update")
-  public String updateWorkLog(Integer seq, Model model){
-    WorkLogDto workLogDto = workLogService.selectWorkLog(seq);
+  public String updateWorkLog(Integer workLogSeq, Model model){
+    WorkLogDto workLogDto = workLogService.selectWorkLog(workLogSeq);
     model.addAttribute("info", workLogDto);
     return "workLog/update";
   }
@@ -139,7 +139,7 @@ public class WorkLogController {
       description = "게시물이 성공적으로 등록되었습니다";
     }
 
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?seq=" + workLogDto.getWorkLogSeq() + "'").build();
+    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?workLogSeq=" + workLogDto.getWorkLogSeq() + "'").build();
   }
 
   @PostMapping("/delete")

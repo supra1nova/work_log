@@ -62,7 +62,7 @@
     SELECT *
     FROM TB_WORK_LOG
     WHERE
-      AND WORK_LOG_SEQ = #{workLogSeq}
+      WORK_LOG_SEQ = #{workLogSeq}
       AND ACTIVE = 'Y'
   </select>
 
