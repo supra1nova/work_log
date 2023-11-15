@@ -21,5 +21,6 @@
   <div class="tr" style="margin-right: 100px; color: white">
     <span style="margin: 0 10px"><a style="color: white" href="/">메인</a></span>
     <span style="margin: 0 10px"><a style="color: white" href="/member/list">회원 관리</a></span>
+    <span style="margin: 0 10px"><a style="color: white" href="/work-log">일일 보고</a></span>
   </div>
 </div>
