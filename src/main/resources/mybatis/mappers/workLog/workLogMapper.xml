@@ -78,9 +78,7 @@
   <update id="updateWorkLog">
     UPDATE TB_WORK_LOG
     SET
-        UPD_DATETIME = NOW()
-      , UPD_ID = #{updId}
-      , WORK_LOG_DATE = #{workLogDate}
+        UPD_ID = #{updId}
       , WORK_LOG_CONTENT = #{workLogContent}
     WHERE
       WORK_LOG_SEQ = #{workLogSeq}
