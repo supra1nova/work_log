@@ -1,5 +1,6 @@
 package com.cmw.kd.member.model;
 
+import com.cmw.kd.core.commmonEnum.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +23,7 @@ public class MemberDto {
   private String memberRegDatetime;
   private String memberUpdDatetime;
   private String active;
+  private Role role;
 
   public void encodePassword(PasswordEncoder passwordEncoder) {
     memberPassword = passwordEncoder.encode(memberPassword);
@@ -39,6 +41,7 @@ public class MemberDto {
       .memberRegDatetime(memberRegDatetime)
       .memberUpdDatetime(memberUpdDatetime)
       .active(active)
+      .role(role)
       .build();
   }
 
@@ -56,5 +59,6 @@ public class MemberDto {
     private String memberRegDatetime;
     private String memberUpdDatetime;
     private String active;
+    private Role role;
   }
 }
