@@ -1,10 +1,10 @@
 package com.cmw.kd.workLog.controller;
 
+import com.cmw.kd.core.utils.CommonUtils;
 import com.cmw.kd.workLog.model.WorkLogCalendarDto;
 import com.cmw.kd.workLog.service.WorkLogCalendarService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +22,11 @@ public class WorkLogCalendarController {
 
   @GetMapping({"", "/", "/list"})
   public String getWorkLogCalendarList(@ModelAttribute WorkLogCalendarDto workLogCalendarDto, Model model) {
-    List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarService.selectWorkLogCalendarList(workLogCalendarDto);
+    List<WorkLogCalendarDto> calendarDtoList = workLogCalendarService.selectWorkLogCalendarList(workLogCalendarDto);
+    List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarService.selectWorkLogAndCalendarList(workLogCalendarDto);
+    model.addAttribute("calendarList", calendarDtoList);
     model.addAttribute("list", workLogCalendarDtoList);
+    model.addAttribute("role", CommonUtils.getSession().getAttribute("loginMemberRole").toString());
     return "workLog/calendar-list";
   }
 

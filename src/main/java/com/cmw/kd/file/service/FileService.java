@@ -1,6 +1,6 @@
 package com.cmw.kd.file.service;
 
-import com.cmw.kd.core.dto.CommonDto;
+import com.cmw.kd.core.commonDto.CommonDto;
 import com.cmw.kd.file.model.FileDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

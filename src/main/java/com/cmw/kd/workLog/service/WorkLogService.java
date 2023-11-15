@@ -1,6 +1,6 @@
 package com.cmw.kd.workLog.service;
 
-import com.cmw.kd.core.dto.SearchDto;
+import com.cmw.kd.core.commonDto.SearchDto;
 import com.cmw.kd.workLog.model.WorkLogDto;
 import com.cmw.kd.workLog.model.WorkLogDto.WorkLogVo;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class WorkLogService {
   }
 
   public WorkLogDto selectWorkLogByCalDate(WorkLogDto workLogDto){
-    workLogDto.setMemberInfo();
+//    workLogDto.setMemberInfo();
     return workLogMapper.selectWorkLogByCalDate(workLogDto.toEntity());
   }
 
@@ -49,7 +49,7 @@ public class WorkLogService {
   }
 
   public void deleteWorkLogByCalDate(WorkLogDto workLogDto){
-    workLogDto.setMemberInfo();
+//    workLogDto.setMemberInfo();
     workLogMapper.deleteWorkLogByCalDate(workLogDto.toEntity());
   }
 }

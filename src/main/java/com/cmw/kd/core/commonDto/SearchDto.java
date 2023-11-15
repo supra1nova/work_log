@@ -1,4 +1,4 @@
-package com.cmw.kd.core.dto;
+package com.cmw.kd.core.commonDto;
 
 import lombok.Getter;
 import lombok.Setter;

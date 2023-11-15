@@ -1,6 +1,6 @@
 package com.cmw.kd.file.model;
 
-import com.cmw.kd.core.dto.RegUpdDateDto;
+import com.cmw.kd.core.commonDto.RegUpdDateDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
