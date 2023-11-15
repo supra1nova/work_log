@@ -33,6 +33,7 @@ public class AuthService {
 
     HttpSession session = CommonUtils.getSession();
     session.setAttribute("loginId", memberInfo.getMemberId());
+    session.setAttribute("loginMemberName", memberInfo.getMemberName());
 
     return true;
   }

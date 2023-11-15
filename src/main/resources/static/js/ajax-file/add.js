@@ -42,12 +42,20 @@ const removeFile = e => {
   $(e.currentTarget).remove();
 }
 
-const saveData = (additionalContent= undefined) => {
+const saveData = (additionalContentFieldName = undefined, additionalContent= undefined) => {
   const $form = $('form[method=post]');
   const $formData = new FormData($form[0]);
 
-  if (typeof additionalContent !== "undefined" ||  additionalContent !== null || additionalContent !== "") {
-    $formData.append("content", additionalContent);
+  if (
+    (
+      typeof additionalContentFieldName !== "undefined" ||  additionalContentFieldName !== null || additionalContentFieldName !== ""
+    )
+    &&
+    (
+      typeof additionalContent !== "undefined" ||  additionalContent !== null || additionalContent !== ""
+    )
+  ) {
+    $formData.append(additionalContentFieldName, additionalContent);
   }
 
   const success = data => {
