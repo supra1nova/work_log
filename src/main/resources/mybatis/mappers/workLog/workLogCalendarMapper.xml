@@ -10,9 +10,12 @@
     ) TWLC
     LEFT OUTER JOIN (
         SELECT * FROM TB_MEMBER
-        <if test="regId != null and !''.equals(regId)">
-            WHERE MEMBER_ID = #{regId}
-        </if>
+        <where>
+          <if test="regId != null and !''.equals(regId)">
+              AND MEMBER_ID = #{regId}
+          </if>
+          AND ROLE != 'MANAGER'
+        </where>
     ) TM1 ON 1 = 1 AND TWLC.ACTIVE = 'Y'
     LEFT OUTER JOIN (
         SELECT * FROM TB_WORK_LOG WHERE ACTIVE = 'Y'

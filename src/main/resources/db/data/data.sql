@@ -10,7 +10,7 @@ INSERT INTO TB_MEMBER(
 VALUES (
     'testId1'
   , '$2a$10$liYc6ycYDYzrVPpYH9B21.jHrTvwswIhvATjMucCPDYrXjxI/4eOi'
-  , 'tester 1'
+  , '이순신'
   , 'testId1@test.com'
   , MEMBER_ID
   , 'STAFF'
@@ -28,7 +28,7 @@ INSERT INTO TB_MEMBER(
 VALUES (
     'testId2'
   , '$2a$10$liYc6ycYDYzrVPpYH9B21.jHrTvwswIhvATjMucCPDYrXjxI/4eOi'
-  , 'tester 2'
+  , '전우치'
   , 'testId2@test.com'
   , MEMBER_ID
   , 'STAFF'
@@ -46,7 +46,7 @@ INSERT INTO TB_MEMBER(
 VALUES (
     'testId3'
   , '$2a$10$liYc6ycYDYzrVPpYH9B21.jHrTvwswIhvATjMucCPDYrXjxI/4eOi'
-  , 'tester 3'
+  , '이성계'
   , 'testId3@test.com'
   , MEMBER_ID
   , 'STAFF'
@@ -64,7 +64,7 @@ INSERT INTO TB_MEMBER(
 VALUES (
     'testId4'
   , '$2a$10$liYc6ycYDYzrVPpYH9B21.jHrTvwswIhvATjMucCPDYrXjxI/4eOi'
-  , 'tester 4'
+  , '관리자'
   , 'testId4@test.com'
   , MEMBER_ID
   , 'MANAGER'
