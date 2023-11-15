@@ -1,6 +1,6 @@
 package com.cmw.kd.member.service;
 
-import com.cmw.kd.core.dto.SearchDto;
+import com.cmw.kd.core.commonDto.SearchDto;
 import com.cmw.kd.core.utils.CommonUtils;
 import com.cmw.kd.member.model.MemberDto;
 import lombok.RequiredArgsConstructor;

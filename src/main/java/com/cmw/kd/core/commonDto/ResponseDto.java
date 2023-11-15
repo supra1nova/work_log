@@ -1,4 +1,4 @@
-package com.cmw.kd.core.dto;
+package com.cmw.kd.core.commonDto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

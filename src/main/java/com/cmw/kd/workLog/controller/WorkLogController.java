@@ -1,8 +1,8 @@
 package com.cmw.kd.workLog.controller;
 
-import com.cmw.kd.core.dto.CommonDto;
-import com.cmw.kd.core.dto.ResponseDto;
-import com.cmw.kd.core.dto.SearchDto;
+import com.cmw.kd.core.commonDto.CommonDto;
+import com.cmw.kd.core.commonDto.ResponseDto;
+import com.cmw.kd.core.commonDto.SearchDto;
 import com.cmw.kd.file.service.FileService;
 import com.cmw.kd.workLog.model.WorkLogDto;
 import com.cmw.kd.workLog.service.WorkLogService;

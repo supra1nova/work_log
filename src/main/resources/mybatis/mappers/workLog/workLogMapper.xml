@@ -24,7 +24,7 @@
     </if>
   </sql>
 
-  <select id="selectWorkLogListCount" parameterType="com.cmw.kd.core.dto.SearchDto" resultType="int">
+  <select id="selectWorkLogListCount" parameterType="com.cmw.kd.core.commonDto.SearchDto" resultType="int">
     SELECT COUNT(WORK_LOG_SEQ)
     FROM TB_WORK_LOG
     <where>
@@ -33,7 +33,7 @@
     </where>
   </select>
 
-  <select id="selectWorkLogList" parameterType="com.cmw.kd.core.dto.SearchDto" resultType="com.cmw.kd.workLog.model.WorkLogDto">
+  <select id="selectWorkLogList" parameterType="com.cmw.kd.core.commonDto.SearchDto" resultType="com.cmw.kd.workLog.model.WorkLogDto">
     SELECT *
     FROM TB_WORK_LOG
     <where>
