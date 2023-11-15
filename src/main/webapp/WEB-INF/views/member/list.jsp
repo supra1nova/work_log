@@ -83,6 +83,7 @@
       <col style="min-width: 50px; width: 50px">
       <col style="min-width: 125px; width: 125px">
       <col style="min-width: 125px; width: 125px">
+      <col style="min-width: 125px; width: 125px">
       <col style="min-width: 200px; width: 200px">
       <col style="min-width: 150px; width: 150px">
       <col style="min-width: 150px; width: 150px">
@@ -92,6 +93,7 @@
         <th>No</th>
         <th>아이디</th>
         <th>이름</th>
+        <th>권한</th>
         <th>이메일</th>
         <th>등록일시</th>
         <th>수정일시</th>
@@ -104,6 +106,7 @@
             <td class="tc"><a href="/member/view/${item.memberId}">${item.memberSeq}</a></td>
             <td class="tc ellipsis-no-wrap"><a href="/member/view/${item.memberId}">${item.memberId}</a></td>
             <td class="tc ellipsis-no-wrap"><a href="/member/view/${item.memberId}">${item.memberName}</a></td>
+            <td class="tc ellipsis-no-wrap"><a href="/member/view/${item.memberId}">${item.role}</a></td>
             <td class="tc ellipsis-no-wrap"><a href="/member/view/${item.memberId}">${item.memberEmail}</a></td>
             <td class="tc"><a href="/member/view/${item.memberId}">${item.memberRegDatetime}</a></td>
             <td class="tc"><a href="/member/view/${item.memberId}">${empty item.memberUpdDatetime ? "-" : item.memberUpdDatetime}</a></td>

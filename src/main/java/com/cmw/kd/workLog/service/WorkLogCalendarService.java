@@ -1,5 +1,6 @@
 package com.cmw.kd.workLog.service;
 
+import com.cmw.kd.core.commmonEnum.Role;
 import com.cmw.kd.core.utils.CommonUtils;
 import com.cmw.kd.workLog.model.WorkLogCalendarDto;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,25 @@ public class WorkLogCalendarService {
       workLogCalendarDto.setCalMonth(LocalDate.now().withDayOfMonth(1).toString().substring(0, 7));
     }
 
-    workLogCalendarDto.setRegId(CommonUtils.getSession().getAttribute("loginId").toString());
-
     List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarMapper.selectWorkLogCalendarList(workLogCalendarDto.toEntity());
+    workLogCalendarDtoList.forEach(dto -> dto.setCalDayName(LocalDate.parse(dto.getCalDate()).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN)));
+
+    return workLogCalendarDtoList;
+  }
+
+  public List<WorkLogCalendarDto> selectWorkLogAndCalendarList(WorkLogCalendarDto workLogCalendarDto) {
+    // calendar list 가져옴
+    if(Objects.isNull(workLogCalendarDto) || StringUtils.isBlank(workLogCalendarDto.getCalMonth())){
+      workLogCalendarDto = new WorkLogCalendarDto();
+      workLogCalendarDto.setCalMonth(LocalDate.now().withDayOfMonth(1).toString().substring(0, 7));
+    }
+
+    // 만약 ROLE 이 STAFF 면 세션에서 loginId 정보를 꺼내서 조회에 이용 아니면 그냥 빈 값으로 조회
+    if(CommonUtils.getSession().getAttribute("loginMemberRole").toString().equals(Role.STAFF.toString())) {
+      workLogCalendarDto.setRegId(CommonUtils.getSession().getAttribute("loginId").toString());
+    }
+
+    List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarMapper.selectWorkLogAndCalendarList(workLogCalendarDto.toEntity());
     workLogCalendarDtoList.forEach(dto -> dto.setCalDayName(LocalDate.parse(dto.getCalDate()).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN)));
 
     return workLogCalendarDtoList;

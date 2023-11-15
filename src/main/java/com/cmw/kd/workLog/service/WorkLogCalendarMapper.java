@@ -11,5 +11,7 @@ import static com.cmw.kd.workLog.model.WorkLogCalendarDto.*;
 public interface WorkLogCalendarMapper {
   List<WorkLogCalendarDto> selectWorkLogCalendarList(WorkCalendarVo workCalendarVo);
 
+  List<WorkLogCalendarDto> selectWorkLogAndCalendarList(WorkCalendarVo workCalendarVo);
+
   void insertWorkLogCalendar(WorkCalendarVo workCalendarVo);
 }

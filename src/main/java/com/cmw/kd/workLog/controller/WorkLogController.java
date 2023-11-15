@@ -1,8 +1,8 @@
 package com.cmw.kd.workLog.controller;
 
-import com.cmw.kd.core.dto.CommonDto;
-import com.cmw.kd.core.dto.ResponseDto;
-import com.cmw.kd.core.dto.SearchDto;
+import com.cmw.kd.core.commonDto.CommonDto;
+import com.cmw.kd.core.commonDto.ResponseDto;
+import com.cmw.kd.core.commonDto.SearchDto;
 import com.cmw.kd.file.service.FileService;
 import com.cmw.kd.workLog.model.WorkLogDto;
 import com.cmw.kd.workLog.service.WorkLogService;
@@ -93,12 +93,13 @@ public class WorkLogController {
     }
 
 //    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?workLogSeq=" + workLogDto.getWorkLogSeq() + "'").build();
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view-by-cal-date?workLogDate=" + workLogDto.getWorkLogDate() + "'").build();
+//    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view-by-cal-date?workLogDate=" + workLogDto.getWorkLogDate() + "'").build();
+    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view-by-cal-date?workLogDate=" + workLogDto.getWorkLogDate() + "&regId=" + workLogDto.getRegId() + "'").build();
   }
 
   @GetMapping("/update")
-  public String updateWorkLog(Integer seq, Model model){
-    WorkLogDto workLogDto = workLogService.selectWorkLog(seq);
+  public String updateWorkLog(Integer workLogSeq, Model model){
+    WorkLogDto workLogDto = workLogService.selectWorkLog(workLogSeq);
     model.addAttribute("info", workLogDto);
     return "workLog/update";
   }
@@ -138,7 +139,7 @@ public class WorkLogController {
       description = "게시물이 성공적으로 등록되었습니다";
     }
 
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?seq=" + workLogDto.getWorkLogSeq() + "'").build();
+    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?workLogSeq=" + workLogDto.getWorkLogSeq() + "'").build();
   }
 
   @PostMapping("/delete")
