@@ -33,7 +33,7 @@ public class CommonUtils {
   }
 
   public static boolean isLogin() {
-    return StringUtils.isBlank((String) getSession().getAttribute("loginId"));
+    return StringUtils.isNotBlank((String) getSession().getAttribute("loginId"));
   }
 
   public static String convertDate(String dateStr){
