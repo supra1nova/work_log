@@ -55,14 +55,42 @@ public class WorkLogCalendarService {
     workLogCalendarMapper.insertWorkLogCalendar(workLogCalendarDto.toEntity());
   }
 
-  public void procedureInsertWorkLogCalendar(){
-    LocalDate firstDate = LocalDate.now().withDayOfMonth(1);
+  public boolean manualInsertWorkLogCalendar(String calMonth) {
+    // year, month 가 다 있는지 확인
+    // year는 숫자 형태인지 확인 -> String 으로 변환한 뒤에도 4자리인지 확인
+    // month는 1~13사이인지 확인 -> String 변환
+    // LocalDate.of() 를 이용해 year, month, 1 로 첫번째 날을 생성후 변수 선언
+    // 만들어진 변수를 procedureInsertWorkLogCalendar() 메서드의 인수로 삽입 및 호출
+    String[] calDateArr = calMonth.split("-");
+    LocalDate calDate = LocalDate.of(Integer.parseInt(calDateArr[0]), Integer.parseInt(calDateArr[1]), 1);
+
+    // 생성하려고 하는 일자가 현재보다 미래의 시점이면 생성 불가
+    if(calDate.isAfter(LocalDate.now())) {
+      return false;
+    }
+
+    WorkLogCalendarDto workLogCalendarDto = new WorkLogCalendarDto();
+    workLogCalendarDto.setCalMonth(calDate.withDayOfMonth(1).toString().substring(0, 7));
+
+    // workLogCalendarList 가 존재하는지 확인
+    List<WorkLogCalendarDto> workLogCalendarDtoList = selectWorkLogCalendarList(workLogCalendarDto);
+    if (workLogCalendarDtoList.isEmpty()) {
+      procedureInsertWorkLogCalendar(calDate);
+      return true;
+    }
+    return false;
+  }
+
+  public void procedureInsertWorkLogCalendar(LocalDate localDate){
+//    LocalDate firstDate = LocalDate.now().withDayOfMonth(1);
+    LocalDate firstDate = localDate.withDayOfMonth(1);
     int daySize = firstDate.lengthOfMonth();
+
+    WorkLogCalendarDto workLogCalendarDto = new WorkLogCalendarDto();
 
     for (int i = 0; i < daySize; i++) {
       LocalDate saveDate = firstDate.plusDays(i);
 
-      WorkLogCalendarDto workLogCalendarDto = new WorkLogCalendarDto();
       workLogCalendarDto.setCalDate(saveDate.toString());
       workLogCalendarDto.setCalMonth(saveDate.toString().substring(0, 7));
 

@@ -122,12 +122,9 @@
   </div>
 
   <div class="tr mb150" >
-<%--    <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/update-by-cal-date?workLogDate=${info.workLogDate}'">수정</button>--%>
-<%--    <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/update-by-cal-date?workLogDate=${info.workLogDate}&regId=${info.regId}'">수정</button>--%>
     <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/update?workLogSeq=${info.workLogSeq}'">수정</button>
     <button type="button" id="deleteBtn">삭제</button>
-<%--    <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/list'">목록</button>--%>
-    <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log-calendar/list'">목록</button>
+    <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log-calendar?calMonth=${info.workLogDate.substring(0, 7)}'">목록</button>
   </div>
 </div>
 </body>
