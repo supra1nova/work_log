@@ -3,6 +3,7 @@ package com.cmw.kd.workLog.controller;
 import com.cmw.kd.core.commonDto.CommonDto;
 import com.cmw.kd.core.commonDto.ResponseDto;
 import com.cmw.kd.core.commonDto.SearchDto;
+import com.cmw.kd.core.utils.CommonUtils;
 import com.cmw.kd.file.service.FileService;
 import com.cmw.kd.workLog.model.WorkLogDto;
 import com.cmw.kd.workLog.service.WorkLogService;
@@ -45,6 +46,7 @@ public class WorkLogController {
   public String getWorkLog(Integer workLogSeq, Model model){
     WorkLogDto workLogDto = workLogService.selectWorkLog(workLogSeq);
     model.addAttribute("info", workLogDto);
+    model.addAttribute("memberId", CommonUtils.getSession().getAttribute("loginId").toString());
     return "workLog/view";
   }
 
