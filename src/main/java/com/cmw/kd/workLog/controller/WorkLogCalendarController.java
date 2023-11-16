@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -20,14 +21,16 @@ import java.util.List;
 public class WorkLogCalendarController {
   private final WorkLogCalendarService workLogCalendarService;
 
-  @GetMapping({"", "/", "/list"})
+  @GetMapping({"", "/"})
   public String getWorkLogCalendarList(@ModelAttribute WorkLogCalendarDto workLogCalendarDto, Model model) {
     List<WorkLogCalendarDto> calendarDtoList = workLogCalendarService.selectWorkLogCalendarList(workLogCalendarDto);
     List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarService.selectWorkLogAndCalendarList(workLogCalendarDto);
+
     model.addAttribute("calendarList", calendarDtoList);
     model.addAttribute("list", workLogCalendarDtoList);
     model.addAttribute("role", CommonUtils.getSession().getAttribute("loginMemberRole").toString());
-    return "workLog/calendar-list";
+
+    return calendarDtoList.isEmpty() ? "redirect:/" : "workLog/calendar-list";
   }
 
   @GetMapping("/add/{calMonth}")
