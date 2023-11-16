@@ -68,7 +68,6 @@ public class WorkLogController {
   @PostMapping("/add")
   @ResponseBody
   public ResponseDto<?> addWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto, BindingResult errors){
-//  public ResponseDto<?> addWorkLogProc(@ModelAttribute WorkLogDto workLogDto){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
 
@@ -94,9 +93,7 @@ public class WorkLogController {
       description = "게시물이 성공적으로 등록되었습니다";
     }
 
-//    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?workLogSeq=" + workLogDto.getWorkLogSeq() + "'").build();
-//    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view-by-cal-date?workLogDate=" + workLogDto.getWorkLogDate() + "'").build();
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view-by-cal-date?workLogDate=" + workLogDto.getWorkLogDate() + "&regId=" + workLogDto.getRegId() + "'").build();
+    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?workLogSeq=" + workLogDto.getWorkLogSeq() + "'").build();
   }
 
   @GetMapping("/update")
@@ -162,7 +159,7 @@ public class WorkLogController {
       description = "게시물이 성공적으로 삭제되었습니다";
     }
 
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log-calendar/list'").build();
+    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log-calendar'").build();
   }
 
   @PostMapping("/delete-by-cal-date")
@@ -183,7 +180,7 @@ public class WorkLogController {
       description = "게시물이 성공적으로 삭제되었습니다";
     }
 
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log-calendar/list'").build();
+    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log-calendar'").build();
   }
 
   @PostMapping("/add-image")
