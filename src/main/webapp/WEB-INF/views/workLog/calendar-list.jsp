@@ -8,7 +8,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
   <title>Simple  list</title>
@@ -63,7 +62,7 @@
     <c:set var="today" value="<%=new java.util.Date()%>" />
     <fmt:formatDate var="currDate" value="${today}" pattern="yyyy-MM-dd" />
     <div style="margin: 0.8em auto; text-align: center;">
-      <span style="font-size: 45px; font-weight: bolder">${fn:substring(calendarList.get(0).calMonth, 5, 7)}월</span>
+      <span style="font-size: 45px; font-weight: bolder">${calendarList.get(0).calMonth.substring(5, 7)}월</span>
     </div>
     <div>
 
