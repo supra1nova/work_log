@@ -122,8 +122,10 @@
   </div>
 
   <div class="tr mb150" >
-    <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/update?workLogSeq=${info.workLogSeq}'">수정</button>
-    <button type="button" id="deleteBtn">삭제</button>
+    <c:if test="${memberId.equals(info.regId)}">
+      <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/update?workLogSeq=${info.workLogSeq}'">수정</button>
+      <button type="button" id="deleteBtn">삭제</button>
+    </c:if>
     <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log-calendar?calMonth=${info.workLogDate.substring(0, 7)}'">목록</button>
   </div>
 </div>
