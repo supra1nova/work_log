@@ -34,7 +34,7 @@ public class AuthService {
     HttpSession session = CommonUtils.getSession();
     session.setAttribute("loginId", memberInfo.getMemberId());
     session.setAttribute("loginMemberName", memberInfo.getMemberName());
-    session.setAttribute("loginMemberRole", memberInfo.getRole());
+    session.setAttribute("loginMemberRole", memberInfo.getRole().toString());
 
     return true;
   }

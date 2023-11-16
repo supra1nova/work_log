@@ -9,7 +9,7 @@ CREATE OR REPLACE TABLE TB_MEMBER(
   , MEMBER_REG_DATETIME DATETIME  DEFAULT NOW()
   , MEMBER_UPD_DATETIME DATETIME  ON UPDATE NOW()
   , ACTIVE                        CHAR(1) DEFAULT 'Y'
-  , ROLE                          VARCHAR(10)
+  , ROLE                          VARCHAR(10) DEFAULT 'STAFF'
 )
 ;
 

@@ -11,8 +11,9 @@ import java.io.IOException;
 @Configuration
 public class LoginCheckInterceptor implements HandlerInterceptor {
 
+  @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-    if (CommonUtils.isLogin()){
+    if (!CommonUtils.isLogin()){
       try {
         response.sendRedirect("/auth/login");
       } catch (IOException e) {
