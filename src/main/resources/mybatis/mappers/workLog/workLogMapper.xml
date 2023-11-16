@@ -44,6 +44,14 @@
     LIMIT #{pagination.rowNum}, #{pagination.listLimit}
   </select>
 
+  <select id="selectWorkLog" parameterType="int" resultType="com.cmw.kd.workLog.model.WorkLogDto">
+    SELECT *
+    FROM TB_WORK_LOG
+    WHERE
+      WORK_LOG_SEQ = #{workLogSeq}
+      AND ACTIVE = 'Y'
+  </select>
+
     <insert id="insertWorkLog" useGeneratedKeys="true" keyProperty="workLogSeq">
     INSERT INTO TB_WORK_LOG(
         WORK_LOG_SEQ
@@ -57,23 +65,6 @@
       , #{regId}
     )
   </insert>
-
-  <select id="selectWorkLog" parameterType="int" resultType="com.cmw.kd.workLog.model.WorkLogDto">
-    SELECT *
-    FROM TB_WORK_LOG
-    WHERE
-      WORK_LOG_SEQ = #{workLogSeq}
-      AND ACTIVE = 'Y'
-  </select>
-
-  <select id="selectWorkLogByCalDate" resultType="com.cmw.kd.workLog.model.WorkLogDto">
-    SELECT *
-    FROM TB_WORK_LOG
-    WHERE
-      REG_ID = #{regId}
-      AND WORK_LOG_DATE = #{workLogDate}
-      AND ACTIVE = 'Y'
-  </select>
 
   <update id="updateWorkLog">
     UPDATE TB_WORK_LOG
@@ -92,12 +83,4 @@
       WORK_LOG_SEQ = #{workLogSeq}
   </update>
 
-  <update id="deleteWorkLogByCalDate">
-    UPDATE TB_WORK_LOG
-    SET
-    ACTIVE = 'N'
-    WHERE
-      WORK_LOG_DATE = #{workLogDate} AND
-      REG_ID = #{regId}
-  </update>
 </mapper>

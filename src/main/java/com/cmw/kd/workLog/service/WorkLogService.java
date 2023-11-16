@@ -23,6 +23,14 @@ public class WorkLogService {
     return workLogMapper.selectWorkLogList(searchDto);
   }
 
+  public WorkLogDto selectWorkLog(Integer workLogSeq){
+    WorkLogDto workLogDto = workLogMapper.selectWorkLog(workLogSeq);
+    if(CommonUtils.getSession().getAttribute("loginMemberRole").equals(Role.STAFF.toString()) && !CommonUtils.getSession().getAttribute("loginId").equals(workLogDto.getRegId())){
+      workLogDto = null;
+    }
+    return workLogDto;
+  }
+
   public boolean insertWorkLog(WorkLogDto workLogDto){
     workLogDto.setMemberInfo();
 
@@ -36,19 +44,6 @@ public class WorkLogService {
     return false;
   }
 
-  public WorkLogDto selectWorkLog(Integer workLogSeq){
-    WorkLogDto workLogDto = workLogMapper.selectWorkLog(workLogSeq);
-    if(CommonUtils.getSession().getAttribute("loginMemberRole").equals(Role.STAFF.toString()) && !CommonUtils.getSession().getAttribute("loginId").equals(workLogDto.getRegId())){
-      workLogDto = null;
-    }
-    return workLogDto;
-  }
-
-  public WorkLogDto selectWorkLogByCalDate(WorkLogDto workLogDto){
-//    workLogDto.setMemberInfo();
-    return workLogMapper.selectWorkLogByCalDate(workLogDto.toEntity());
-  }
-
   public boolean updateWorkLog(WorkLogDto workLogDto){
     workLogDto.setMemberInfo();
     return workLogMapper.updateWorkLog(workLogDto.toEntity()) > 0;
@@ -58,8 +53,4 @@ public class WorkLogService {
     return workLogMapper.deleteWorkLog(workLogDto.toEntity()) > 0;
   }
 
-  public void deleteWorkLogByCalDate(WorkLogDto workLogDto){
-//    workLogDto.setMemberInfo();
-    workLogMapper.deleteWorkLogByCalDate(workLogDto.toEntity());
-  }
 }

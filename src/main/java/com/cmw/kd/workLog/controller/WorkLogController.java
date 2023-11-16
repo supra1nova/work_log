@@ -54,13 +54,6 @@ public class WorkLogController {
     return "workLog/view";
   }
 
-  @GetMapping("/view-by-cal-date")
-  public String getWorkLogByCalDate(@ModelAttribute WorkLogDto workLogDto, Model model){
-    WorkLogDto result = workLogService.selectWorkLogByCalDate(workLogDto);
-    model.addAttribute("info", result);
-    return "workLog/view";
-  }
-
   @GetMapping("/add")
   public String addWorkLog(@ModelAttribute WorkLogDto workLogDto, Model model){
     workLogDto.setMemberInfo();
@@ -105,13 +98,6 @@ public class WorkLogController {
   public String updateWorkLog(Integer workLogSeq, Model model){
     WorkLogDto workLogDto = workLogService.selectWorkLog(workLogSeq);
     model.addAttribute("info", workLogDto);
-    return "workLog/update";
-  }
-
-  @GetMapping("/update-by-cal-date")
-  public String updateWorkLogByCalDate(@ModelAttribute WorkLogDto workLogDto, Model model){
-    WorkLogDto result = workLogService.selectWorkLogByCalDate(workLogDto);
-    model.addAttribute("info", result);
     return "workLog/update";
   }
 
@@ -169,27 +155,6 @@ public class WorkLogController {
     return ResponseDto.builder().result(result).description(description).callback(callback).build();
   }
 
-  @PostMapping("/delete-by-cal-date")
-  @ResponseBody
-  public ResponseDto<?> deleteWorkLogProcByCalDate(@RequestBody WorkLogDto workLogDto){
-    boolean result = false;
-    String description = "게시물 등록에 실패했습니다";
-
-    try {
-      workLogService.deleteWorkLogByCalDate(workLogDto);
-      result = true;
-    } catch (Exception e) {
-      log.error(e.getMessage());
-      description = e.getMessage();
-    }
-
-    if (result) {
-      description = "게시물이 성공적으로 삭제되었습니다";
-    }
-
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log-calendar'").build();
-  }
-
   @PostMapping("/add-image")
   @ResponseBody
   public ResponseDto<?> addImageProc(@ModelAttribute CommonDto commonDto) {
@@ -211,4 +176,5 @@ public class WorkLogController {
 
     return ResponseDto.builder().result(result).description(description).data(fileUrl).build();
   }
+
 }
