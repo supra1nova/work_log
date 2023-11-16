@@ -59,12 +59,12 @@
   <div>Work log list page</div>
 
   <div style="width: 80%; margin: 0 auto; vertical-align: center; line-height: 40px;">
+    <c:set var="today" value="<%=new java.util.Date()%>" />
+    <fmt:formatDate var="currDate" value="${today}" pattern="yyyy-MM-dd" />
     <div style="margin: 0.8em auto; text-align: center;">
-      <span style="font-size: 45px; font-weight: bolder">11월(static)</span>
+      <span style="font-size: 45px; font-weight: bolder">${calendarList.get(0).calMonth.substring(5, 7)}월</span>
     </div>
     <div>
-      <c:set var="today" value="<%=new java.util.Date()%>" />
-      <fmt:formatDate var="currDate" value="${today}" pattern="yyyy-MM-dd" />
 
       <c:if test="${role.equals('STAFF')}">
         <%-- 일반 STAFF 의 경우 진행 --%>
