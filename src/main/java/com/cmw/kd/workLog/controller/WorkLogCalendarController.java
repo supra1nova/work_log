@@ -30,13 +30,10 @@ public class WorkLogCalendarController {
     return "workLog/calendar-list";
   }
 
-//  @Scheduled(cron = "")
-//  public void addWorkLogCalendar() {
-//  //   TODO: 사용자 임의 접근 못하도록 막아야
-//  }
-  @GetMapping("/add")
-  public String addWorkLogCalendar() {
-    workLogCalendarService.procedureInsertWorkLogCalendar();
-    return "redirect:/work-log-calendar";
+  @GetMapping("/add/{calMonth}")
+  public String addWorkLogCalendar(@PathVariable String calMonth) {
+    boolean result = workLogCalendarService.manualInsertWorkLogCalendar(calMonth);
+    String returnStr = result ? "/work-log-calendar?calMonth=" + calMonth : "/";
+    return "redirect:" + returnStr;
   }
 }
