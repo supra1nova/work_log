@@ -13,15 +13,15 @@ public interface WorkLogMapper {
 
   List<WorkLogDto> selectWorkLogList(SearchDto searchDto);
 
-  void insertWorkLog(WorkLogVo commonVo);
+  int insertWorkLog(WorkLogVo commonVo);
 
   WorkLogDto selectWorkLog(Integer seq);
 
   WorkLogDto selectWorkLogByCalDate(WorkLogVo workLogVo);
 
-  void updateWorkLog(WorkLogVo commonVo);
+  int updateWorkLog(WorkLogVo commonVo);
 
-  void deleteWorkLog(WorkLogVo commonVo);
+  int deleteWorkLog(WorkLogVo commonVo);
 
   void deleteWorkLogByCalDate(WorkLogVo commonVo);
 }

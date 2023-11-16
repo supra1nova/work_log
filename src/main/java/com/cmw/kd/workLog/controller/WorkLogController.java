@@ -74,6 +74,7 @@ public class WorkLogController {
   public ResponseDto<?> addWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto, BindingResult errors){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
+    String callback = null;
 
     if(errors.hasErrors()){
       final String prefix = "invalid_";
@@ -86,8 +87,7 @@ public class WorkLogController {
     }
 
     try {
-      workLogService.insertWorkLog(workLogDto);
-      result = true;
+      result = workLogService.insertWorkLog(workLogDto);
     } catch (Exception e) {
       log.error(e.getMessage());
       description = e.getMessage();
@@ -95,9 +95,10 @@ public class WorkLogController {
 
     if (result) {
       description = "게시물이 성공적으로 등록되었습니다";
+      callback = "location.href='/work-log/view?workLogSeq=" + workLogDto.getWorkLogSeq() + "'";
     }
 
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?workLogSeq=" + workLogDto.getWorkLogSeq() + "'").build();
+    return ResponseDto.builder().result(result).description(description).callback(callback).build();
   }
 
   @GetMapping("/update")
@@ -119,6 +120,7 @@ public class WorkLogController {
   public ResponseDto<?> updateWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto, BindingResult errors){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
+    String callback = null;
 
     if(errors.hasErrors()){
       final String prefix = "invalid_";
@@ -131,8 +133,7 @@ public class WorkLogController {
     }
 
     try {
-      workLogService.updateWorkLog(workLogDto);
-      result = true;
+      result = workLogService.updateWorkLog(workLogDto);
     } catch (Exception e) {
       log.error(e.getMessage());
       description = e.getMessage();
@@ -140,9 +141,10 @@ public class WorkLogController {
 
     if (result) {
       description = "게시물이 성공적으로 등록되었습니다";
+      callback = "location.href='/work-log/view?workLogSeq=" + workLogDto.getWorkLogSeq() + "'";
     }
 
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log/view?workLogSeq=" + workLogDto.getWorkLogSeq() + "'").build();
+    return ResponseDto.builder().result(result).description(description).callback(callback).build();
   }
 
   @PostMapping("/delete")
@@ -150,10 +152,10 @@ public class WorkLogController {
   public ResponseDto<?> deleteWorkLogProc(@RequestBody WorkLogDto workLogDto){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
+    String callback = null;
 
     try {
-      workLogService.deleteWorkLog(workLogDto);
-      result = true;
+      result = workLogService.deleteWorkLog(workLogDto);
     } catch (Exception e) {
       log.error(e.getMessage());
       description = e.getMessage();
@@ -161,9 +163,10 @@ public class WorkLogController {
 
     if (result) {
       description = "게시물이 성공적으로 삭제되었습니다";
+      callback = "location.href='/work-log-calendar'";
     }
 
-    return ResponseDto.builder().result(result).description(description).callback("location.href='/work-log-calendar'").build();
+    return ResponseDto.builder().result(result).description(description).callback(callback).build();
   }
 
   @PostMapping("/delete-by-cal-date")
