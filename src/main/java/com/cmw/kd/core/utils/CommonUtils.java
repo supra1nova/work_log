@@ -1,5 +1,6 @@
 package com.cmw.kd.core.utils;
 
+import com.cmw.kd.core.commmonEnum.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -34,6 +35,11 @@ public class CommonUtils {
 
   public static boolean isLogin() {
     return StringUtils.isNotBlank((String) getSession().getAttribute("loginId"));
+  }
+
+  public static boolean isManager() {
+    String loginMemberRole = (String) getSession().getAttribute("loginMemberRole");
+    return StringUtils.isNotBlank(loginMemberRole) && loginMemberRole.equals(Role.MANAGER.toString());
   }
 
   public static String convertDate(String dateStr){
