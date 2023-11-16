@@ -51,6 +51,51 @@ public class WorkLogCalendarService {
     return workLogCalendarDtoList;
   }
 
+  public String selectPrevWorkLogCalendarList(WorkLogCalendarDto workLogCalendarDto) {
+    String calDateStr = null;
+    if(!Objects.isNull(workLogCalendarDto)){
+      calDateStr = workLogCalendarDto.getCalMonth();
+    }
+
+    LocalDate prevMonthDate = null;
+    if (StringUtils.isBlank(calDateStr)) {
+      prevMonthDate = LocalDate.now().withDayOfMonth(1).minusDays(1);
+    } else {
+      String[] calDateArr = calDateStr.split("-");
+      prevMonthDate = LocalDate.of(Integer.parseInt(calDateArr[0]), Integer.parseInt(calDateArr[1]), 1).minusDays(1);
+    }
+
+    WorkLogCalendarDto newWorkLogCalendarDto = new WorkLogCalendarDto();
+    String prevMonthValue = prevMonthDate.toString().substring(0, 7);
+    newWorkLogCalendarDto.setCalMonth(prevMonthValue);
+
+    boolean result = !workLogCalendarMapper.selectWorkLogCalendarList(newWorkLogCalendarDto.toEntity()).isEmpty();
+
+    return result ? prevMonthValue : null;
+  }
+
+  public String selectNextWorkLogCalendarList(WorkLogCalendarDto workLogCalendarDto) {
+    String calDateStr = null;
+    if(!Objects.isNull(workLogCalendarDto)){
+      calDateStr = workLogCalendarDto.getCalMonth();
+    }
+
+    LocalDate nextMonthDate = null;
+    if (StringUtils.isBlank(calDateStr)) {
+      nextMonthDate = LocalDate.now().withDayOfMonth(1).plusMonths(2).minusDays(1);
+    } else {
+      String[] calDateArr = calDateStr.split("-");
+      nextMonthDate = LocalDate.of(Integer.parseInt(calDateArr[0]), Integer.parseInt(calDateArr[1]), 1).plusMonths(2).minusDays(1);
+    }
+
+    WorkLogCalendarDto newWorkLogCalendarDto = new WorkLogCalendarDto();
+    String nextMonthValue = nextMonthDate.toString().substring(0, 7);
+    newWorkLogCalendarDto.setCalMonth(nextMonthValue);
+
+    boolean result = !workLogCalendarMapper.selectWorkLogCalendarList(newWorkLogCalendarDto.toEntity()).isEmpty();
+    return result ? nextMonthValue : null;
+  }
+
   public void insertWorkLogCalendar(WorkLogCalendarDto workLogCalendarDto) {
     workLogCalendarMapper.insertWorkLogCalendar(workLogCalendarDto.toEntity());
   }

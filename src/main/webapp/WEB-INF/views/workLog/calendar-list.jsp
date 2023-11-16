@@ -61,11 +61,31 @@
   <div style="width: 80%; margin: 0 auto; vertical-align: center; line-height: 40px;">
     <c:set var="today" value="<%=new java.util.Date()%>" />
     <fmt:formatDate var="currDate" value="${today}" pattern="yyyy-MM-dd" />
-    <div style="margin: 0.8em auto; text-align: center;">
-      <span style="font-size: 45px; font-weight: bolder">${calendarList.get(0).calMonth.substring(5, 7)}월</span>
+    <div style="margin: 0.8em 0.8em 2.5em; text-align: center; display: flex; justify-content: space-between">
+      <div>
+        <span style="font-size: 45px; font-weight: bolder">
+          <c:if test="${prevMonth}">
+            <a style="font-size: 45px; font-weight: bolder" href="/work-log-calendar?calMonth=${prevMonthValue}"><</a>
+          </c:if>
+          <c:if test="${!prevMonth}">
+            &nbsp;
+          </c:if>
+        </span>
+      </div>
+      <div style="font-size: 45px; font-weight: bolder">${calendarList.get(0).calMonth.substring(5, 7)}월</div>
+      <div>
+        <span style="font-size: 45px; font-weight: bolder">
+          <c:if test="${nextMonth}">
+            <a style="font-size: 45px; font-weight: bolder" href="/work-log-calendar?calMonth=${nextMonthValue}">></a>
+          </c:if>
+          <c:if test="${!nextMonth}">
+            &nbsp;
+          </c:if>
+        </span>
+      </div>
     </div>
-    <div>
 
+    <div>
       <c:if test="${role.equals('STAFF')}">
         <%-- 일반 STAFF 의 경우 진행 --%>
         <c:forEach items="${list}" var="item">
