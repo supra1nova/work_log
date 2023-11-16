@@ -12,6 +12,8 @@
 <head>
   <title>Simple  list</title>
   <link rel="stylesheet" href="/css/style.css">
+  <%-- /favicon.ico 404 (Not Found) 관련 에러 해결 위한 코드 : data-url 표기 형식으로 처리 --%>
+  <link rel="icon" href="data:image/x-icon;," type="image/x-icon">
   <style>
     .day-article:hover{
       background-color: #f5dddd;
@@ -56,7 +58,7 @@
 <div class="container">
   <div>Work log list page</div>
 
-  <div style="width: 100%; margin: 0 auto; vertical-align: center; line-height: 40px;">
+  <div style="width: 80%; margin: 0 auto; vertical-align: center; line-height: 40px;">
     <div style="margin: 0.8em auto; text-align: center;">
       <span style="font-size: 45px; font-weight: bolder">11월(static)</span>
     </div>
@@ -64,7 +66,7 @@
       <c:set var="today" value="<%=new java.util.Date()%>" />
       <fmt:formatDate var="currDate" value="${today}" pattern="yyyy-MM-dd" />
 
-      <c:if test="${empty role}">
+      <c:if test="${role.equals('STAFF')}">
         <%-- 일반 STAFF 의 경우 진행 --%>
         <c:forEach items="${list}" var="item">
           <c:if test="${currDate >= item.calDate}">
@@ -90,20 +92,29 @@
         </c:forEach>
       </c:if>
 
-      <c:if test="${!empty role}">
+      <c:if test="${role.equals('MANAGER')}">
         <%-- 일반 STAFF 의 경우 진행 --%>
         <c:forEach items="${calendarList}" var="item">
           <c:if test="${currDate >= item.calDate}">
             <div style="display: flex; justify-content: left; margin-bottom: 10px;">
-              <div class="day-article" style="width: 100%; border: 1px solid darkgrey; min-width: 60%; display: flex; justify-content: space-between; padding: 0; " >
-                <div style="width: 300px; padding-left: 20px; <c:if test="${item.calDayName.equals('토') || item.calDayName.equals('일')}">color: red</c:if>" >${item.calDate} ${item.calDayName} </div>
-                <div>
+              <div class="day-article" style="width: 100%; border: 1px solid darkgrey; min-width: 60%; display: flex; justify-content: space-between; align-items: center; " >
+                <div style="width: 300px; padding-left: 20px; <c:if test="${item.calDayName.equals('토') || item.calDayName.equals('일')}">color: red</c:if>" ><span>${item.calDate} ${item.calDayName}</span> </div>
+                <div style="width: 40%">
                   <c:forEach items="${list}" var="listItem">
-                    <c:if test="${item.calDate.equals(listItem.calDate)}">
-                      <div
-                        <c:if test="${empty listItem.contentSeq}">style="color: red" </c:if>
-                        <c:if test="${!empty listItem.contentSeq}">style="color: green; cursor: pointer;" onclick="location.href='/work-log/view?workLogSeq=${listItem.contentSeq}'" </c:if>
-                      >${listItem.contentRegName}</div>
+                    <c:if test="${!(item.calDayName.equals('토') || item.calDayName.equals('일')) && item.calDate.equals(listItem.calDate)}">
+                      <div style="border: 1px solid darkgrey; margin: 5px; display: flex; justify-content: space-between; align-items: center;
+                        <c:if test="${empty listItem.contentSeq}">color: red; </c:if>
+                        <c:if test="${!empty listItem.contentSeq}">color: green; </c:if>
+                        "
+                      >
+                        <span style="margin: 5px">${listItem.contentRegName}</span>
+                        <c:if test="${empty listItem.contentSeq}">
+                          <span style="padding: 5px; color: red">미작성</span>
+                        </c:if>
+                        <c:if test="${!empty listItem.contentSeq}">
+                          <button type="button" style="margin: 5px;" onclick="location.href='/work-log/view?workLogSeq=${listItem.contentSeq}'">보기</button>
+                        </c:if>
+                      </div>
                     </c:if>
                   </c:forEach>
                 </div>
