@@ -1,6 +1,8 @@
 package com.cmw.kd.workLog.service;
 
+import com.cmw.kd.core.commmonEnum.Role;
 import com.cmw.kd.core.commonDto.SearchDto;
+import com.cmw.kd.core.utils.CommonUtils;
 import com.cmw.kd.workLog.model.WorkLogDto;
 import com.cmw.kd.workLog.model.WorkLogDto.WorkLogVo;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +33,11 @@ public class WorkLogService {
   }
 
   public WorkLogDto selectWorkLog(Integer workLogSeq){
-    return workLogMapper.selectWorkLog(workLogSeq);
+    WorkLogDto workLogDto = workLogMapper.selectWorkLog(workLogSeq);
+    if(CommonUtils.getSession().getAttribute("loginMemberRole").equals(Role.STAFF.toString()) && !CommonUtils.getSession().getAttribute("loginId").equals(workLogDto.getRegId())){
+      workLogDto = null;
+    }
+    return workLogDto;
   }
 
   public WorkLogDto selectWorkLogByCalDate(WorkLogDto workLogDto){

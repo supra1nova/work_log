@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -45,6 +46,9 @@ public class WorkLogController {
   @GetMapping("/view")
   public String getWorkLog(Integer workLogSeq, Model model){
     WorkLogDto workLogDto = workLogService.selectWorkLog(workLogSeq);
+    if(Objects.isNull(workLogDto)){
+      return "redirect:/work-log-calendar";
+    }
     model.addAttribute("info", workLogDto);
     model.addAttribute("memberId", CommonUtils.getSession().getAttribute("loginId").toString());
     return "workLog/view";
