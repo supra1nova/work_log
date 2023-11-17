@@ -3,6 +3,7 @@ package com.cmw.kd.workLog.service;
 import com.cmw.kd.core.commmonEnum.Role;
 import com.cmw.kd.core.utils.CommonUtils;
 import com.cmw.kd.workLog.model.WorkLogCalendarDto;
+import com.cmw.kd.workLog.model.WorkLogCalendarUpdateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -98,6 +99,10 @@ public class WorkLogCalendarService {
 
   public void insertWorkLogCalendar(WorkLogCalendarDto workLogCalendarDto) {
     workLogCalendarMapper.insertWorkLogCalendar(workLogCalendarDto.toEntity());
+  }
+
+  public boolean updateWorkLogCalendar(WorkLogCalendarUpdateDto workLogCalendarUpdateDto) throws NullPointerException {
+    return workLogCalendarMapper.updateWorkLogCalendar(workLogCalendarUpdateDto.toEntity()) > 0;
   }
 
   public boolean manualInsertWorkLogCalendar(String calMonth) {
