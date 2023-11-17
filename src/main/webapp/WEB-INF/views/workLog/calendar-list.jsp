@@ -58,18 +58,8 @@
 
       const dataToSend = {};
       dataToSend.calDate = calDate;
-      // dataToSend.calDate = null;
-      // dataToSend.calDate = '2023-11-18';
-
       dataToSend.active = active;
-      // dataToSend.active = 'F';
-      // dataToSend.active = null;
-      // dataToSend.active = '';
-
       dataToSend.calMonth = calMonth;
-      // dataToSend.calMonth = '0201-11';
-      // dataToSend.calMonth = null;
-      // dataToSend.calMonth = '';
 
       const beforeSend = () => {
         if(!confirm("현재 날짜를 휴일로 전환할까요?")){
@@ -84,22 +74,14 @@
         dataType: 'json',
         beforeSend: beforeSend,
         success: function(data) {
-          if(data.result) {
-            alert(data.description);
-            // new Function(data.callback)();
-          } else {
-            console.log(1111)
-            alert(data.description);
-          }
+          // controller 에서 result 가 true 가 아니면 모두 에러 처리
+          alert(data.description);
+          new Function(data.callback)();
         },
         error: function(data) {
-          console.log(2222);
-          console.log(data.responseJSON);
+          // 업데이트 로직에 들어가는 변수는 기본적으로 사용자가 임의 컨트롤 불가 -> invalid message 개별로 띄워줄 필요는 없을 듯
           alert(data.responseJSON.description);
-          // new Function(data.responseJSON.callback)();
-          // 업데이트 로직에 들어가는 변수는 사용자가 컨트롤 불가하므로 굳이 invalid message 를 개별로 띄워줄 필요는 없을 듯
-          // alert(data.description);
-          // new Function(data.callback)();
+          new Function(data.responseJSON.callback)();
         }
       }
 
@@ -141,8 +123,8 @@
     </div>
 
     <div>
+      <%-- 일반 STAFF 의 경우 진행 --%>
       <c:if test="${role.equals('STAFF')}">
-        <%-- 일반 STAFF 의 경우 진행 --%>
         <c:forEach items="${list}" var="item">
           <c:if test="${currDate >= item.calDate}">
             <div style="display: flex; justify-content: left; margin-bottom: 10px;">
@@ -167,8 +149,8 @@
         </c:forEach>
       </c:if>
 
+      <%-- MANAGER 의 경우 진행 --%>
       <c:if test="${role.equals('MANAGER')}">
-        <%-- 일반 STAFF 의 경우 진행 --%>
         <c:forEach items="${calendarList}" var="item">
           <c:if test="${currDate >= item.calDate}">
             <div style="display: flex; justify-content: left; margin-bottom: 10px;">
@@ -177,7 +159,7 @@
                   <div>${item.calDate} ${item.calDayName}</div>
                   <c:if test="${!(item.calDayName.equals('토') || item.calDayName.equals('일'))}">
 <%--                    <button type="button" onclick="location.href='/work-log-calendar/update?active=${item.active.equals('Y') ? 'N' : 'Y'}'">${item.active.equals('Y') ? '휴일 전환' : '근무일 전환'}</button>--%>
-                    <button type="button" onclick="updateCalendar()" data-cal-month="${item.calMonth}" data-cal-date="${item.calDate}" data-active="${item.active.equals('Y') ? 'N' : 'Y'}">${item.active.equals('Y') ? '휴일 전환' : '근무일 전환'}</button>
+                    <button type="button" onclick="updateCalendar()" data-cal-month="${item.calMonth}" data-cal-date="${item.calDate}" data-active="${item.active.equals('Y') ? 'N' : 'Y'}">${item.active.equals('Y') ? '휴무일 전환' : '근무일 전환'}</button>
                   </c:if>
                 </div>
                 <div style="width: 40%">

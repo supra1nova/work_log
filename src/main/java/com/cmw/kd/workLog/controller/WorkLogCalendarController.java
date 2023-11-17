@@ -71,8 +71,7 @@ public class WorkLogCalendarController {
     }
 
     try {
-      // TODO: service logic
-      result = true;
+      result = workLogCalendarService.updateWorkLogCalendar(workLogCalendarUpdateDto);
     } catch (RuntimeException e) {
       description = e.getMessage();
     }
