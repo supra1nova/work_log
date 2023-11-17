@@ -50,6 +50,61 @@
 
       $.post(ajaxOptions)
     }
+
+    const updateCalendar = () => {
+      const calDate = $(event.target).data('calDate');
+      const active = $(event.target).data('active')
+      const calMonth = $(event.target).data('calMonth')
+
+      const dataToSend = {};
+      dataToSend.calDate = calDate;
+      // dataToSend.calDate = null;
+      // dataToSend.calDate = '2023-11-18';
+
+      dataToSend.active = active;
+      // dataToSend.active = 'F';
+      // dataToSend.active = null;
+      // dataToSend.active = '';
+
+      dataToSend.calMonth = calMonth;
+      // dataToSend.calMonth = '0201-11';
+      // dataToSend.calMonth = null;
+      // dataToSend.calMonth = '';
+
+      const beforeSend = () => {
+        if(!confirm("현재 날짜를 휴일로 전환할까요?")){
+          return false;
+        }
+      }
+
+      const ajaxOptions = {
+        url: '/work-log-calendar/update',
+        data: JSON.stringify(dataToSend),
+        contentType: 'application/json',
+        dataType: 'json',
+        beforeSend: beforeSend,
+        success: function(data) {
+          if(data.result) {
+            alert(data.description);
+            // new Function(data.callback)();
+          } else {
+            console.log(1111)
+            alert(data.description);
+          }
+        },
+        error: function(data) {
+          console.log(2222);
+          console.log(data.responseJSON);
+          alert(data.responseJSON.description);
+          // new Function(data.responseJSON.callback)();
+          // 업데이트 로직에 들어가는 변수는 사용자가 컨트롤 불가하므로 굳이 invalid message 를 개별로 띄워줄 필요는 없을 듯
+          // alert(data.description);
+          // new Function(data.callback)();
+        }
+      }
+
+      $.post(ajaxOptions)
+    }
   </script>
 </head>
 <body>
@@ -92,8 +147,8 @@
           <c:if test="${currDate >= item.calDate}">
             <div style="display: flex; justify-content: left; margin-bottom: 10px;">
               <div class="day-article" style="width: 82%; border: 1px solid darkgrey; min-width: 60%; display: flex; justify-content: space-between; padding: 0; <c:if test="${!empty item.contentActive}"> cursor: pointer; </c:if> " <c:if test="${!empty item.contentSeq}"> onclick="location.href='/work-log/view?workLogSeq=${item.contentSeq}'" </c:if> >
-                <span style="padding-left: 20px; <c:if test="${item.calDayName.equals('토') || item.calDayName.equals('일')}">color: red</c:if>" >${item.calDate} ${item.calDayName} <c:if test="${empty item.contentSeq}">${item.contentRegName}</c:if></span>
-                <c:if test="${!(item.calDayName.equals('토') || item.calDayName.equals('일')) && !empty item.contentSeq}"><span style="padding-right: 20px;" >${item.contentRegName}</span></c:if>
+                <span style="padding-left: 20px; <c:if test="${item.active.equals('N')}">color: red</c:if>" >${item.calDate} ${item.calDayName} <c:if test="${empty item.contentSeq}">${item.contentRegName}</c:if></span>
+                <c:if test="${(item.active.equals('Y')) && !empty item.contentSeq}"><span style="padding-right: 20px;" >${item.contentRegName}</span></c:if>
               </div>
               <div style="width: 250px; margin: auto 0">
                 <%-- TODO: 관리자 계정의 경우 휴일로 전환 버튼 보이기 --%>
@@ -118,10 +173,16 @@
           <c:if test="${currDate >= item.calDate}">
             <div style="display: flex; justify-content: left; margin-bottom: 10px;">
               <div class="day-article" style="width: 100%; border: 1px solid darkgrey; min-width: 60%; display: flex; justify-content: space-between; align-items: center; " >
-                <div style="width: 300px; padding-left: 20px; <c:if test="${item.calDayName.equals('토') || item.calDayName.equals('일')}">color: red</c:if>" ><span>${item.calDate} ${item.calDayName}</span> </div>
+                <div style="width: 55%; padding-left: 20px; display: flex; justify-content: space-between; align-items: center; <c:if test="${item.active.equals('N')}">color: red</c:if>" >
+                  <div>${item.calDate} ${item.calDayName}</div>
+                  <c:if test="${!(item.calDayName.equals('토') || item.calDayName.equals('일'))}">
+<%--                    <button type="button" onclick="location.href='/work-log-calendar/update?active=${item.active.equals('Y') ? 'N' : 'Y'}'">${item.active.equals('Y') ? '휴일 전환' : '근무일 전환'}</button>--%>
+                    <button type="button" onclick="updateCalendar()" data-cal-month="${item.calMonth}" data-cal-date="${item.calDate}" data-active="${item.active.equals('Y') ? 'N' : 'Y'}">${item.active.equals('Y') ? '휴일 전환' : '근무일 전환'}</button>
+                  </c:if>
+                </div>
                 <div style="width: 40%">
                   <c:forEach items="${list}" var="listItem">
-                    <c:if test="${!(item.calDayName.equals('토') || item.calDayName.equals('일')) && item.calDate.equals(listItem.calDate)}">
+                    <c:if test="${item.active.equals('Y') && item.calDate.equals(listItem.calDate)}">
                       <div style="border: 1px solid darkgrey; margin: 5px; display: flex; justify-content: space-between; align-items: center;
                         <c:if test="${empty listItem.contentSeq}">color: red; </c:if>
                         <c:if test="${!empty listItem.contentSeq}">color: green; </c:if>
