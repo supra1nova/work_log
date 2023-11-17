@@ -11,7 +11,6 @@ import javax.validation.constraints.PastOrPresent;
 @Setter
 @ToString
 public class WorkLogCalendarDto {
-  @PastOrPresent
   private String calDate;
   private String calDayName;
   private String calMonth;
