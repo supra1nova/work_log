@@ -3,6 +3,7 @@ package com.cmw.kd.workLog.service;
 import com.cmw.kd.core.commmonEnum.Role;
 import com.cmw.kd.core.utils.CommonUtils;
 import com.cmw.kd.workLog.model.WorkLogCalendarDto;
+import com.cmw.kd.workLog.model.WorkLogCalendarUpdateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +21,7 @@ import java.util.Objects;
 public class WorkLogCalendarService {
   private final WorkLogCalendarMapper workLogCalendarMapper;
 
-  public List<WorkLogCalendarDto> selectWorkLogCalendarList(WorkLogCalendarDto workLogCalendarDto) {
+  public List<WorkLogCalendarDto> selectWorkLogCalendarListUsingCalMonth(WorkLogCalendarDto workLogCalendarDto) {
     // calendar list 가져옴
     if(Objects.isNull(workLogCalendarDto) || StringUtils.isBlank(workLogCalendarDto.getCalMonth())){
       workLogCalendarDto = new WorkLogCalendarDto();
@@ -28,15 +29,28 @@ public class WorkLogCalendarService {
     }
 
     List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarMapper.selectWorkLogCalendarList(workLogCalendarDto.toEntity());
-    workLogCalendarDtoList.forEach(dto -> dto.setCalDayName(LocalDate.parse(dto.getCalDate()).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN)));
-
+    if (!workLogCalendarDtoList.isEmpty()) {
+      workLogCalendarDtoList.forEach(dto -> dto.setCalDayName(LocalDate.parse(dto.getCalDate()).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN)));
+    }
     return workLogCalendarDtoList;
   }
 
-  public List<WorkLogCalendarDto> selectWorkLogAndCalendarList(WorkLogCalendarDto workLogCalendarDto) {
-    // calendar list 가져옴
-    if(Objects.isNull(workLogCalendarDto) || StringUtils.isBlank(workLogCalendarDto.getCalMonth())){
+  public List<WorkLogCalendarDto> selectWorkLogCalendarListUsingCalDate(WorkLogCalendarDto workLogCalendarDto) {
+    if(Objects.isNull(workLogCalendarDto) || StringUtils.isBlank(workLogCalendarDto.getCalDate())){
       workLogCalendarDto = new WorkLogCalendarDto();
+      workLogCalendarDto.setCalDate(LocalDate.now().withDayOfMonth(1).toString());
+    } else {
+      workLogCalendarDto.setCalDate(LocalDate.parse(workLogCalendarDto.getCalDate()).minusDays(1).withDayOfMonth(1).toString());
+    }
+
+    workLogCalendarDto.setCalMonth(workLogCalendarDto.getCalDate().substring(0, 7));
+
+    return selectWorkLogCalendarListUsingCalMonth(workLogCalendarDto);
+  }
+
+
+  public List<WorkLogCalendarDto> selectWorkLogAndCalendarListUsingCalMonth(WorkLogCalendarDto workLogCalendarDto) {
+    if(Objects.isNull(workLogCalendarDto) || StringUtils.isBlank(workLogCalendarDto.getCalMonth())){
       workLogCalendarDto.setCalMonth(LocalDate.now().withDayOfMonth(1).toString().substring(0, 7));
     }
 
@@ -46,12 +60,45 @@ public class WorkLogCalendarService {
     }
 
     List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarMapper.selectWorkLogAndCalendarList(workLogCalendarDto.toEntity());
-    workLogCalendarDtoList.forEach(dto -> dto.setCalDayName(LocalDate.parse(dto.getCalDate()).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN)));
-
+    if (!workLogCalendarDtoList.isEmpty()) {
+      workLogCalendarDtoList.forEach(dto -> dto.setCalDayName(LocalDate.parse(dto.getCalDate()).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN)));
+    }
     return workLogCalendarDtoList;
   }
 
-  public String selectPrevWorkLogCalendarList(WorkLogCalendarDto workLogCalendarDto) {
+  public List<WorkLogCalendarDto> selectPrevWorkLogAndCalendarListUsingCalDate(WorkLogCalendarDto workLogCalendarDto) {
+    if(Objects.isNull(workLogCalendarDto) || StringUtils.isBlank(workLogCalendarDto.getCalDate())){
+      workLogCalendarDto = new WorkLogCalendarDto();
+      workLogCalendarDto.setCalDate(LocalDate.now().withDayOfMonth(1).toString());
+    }
+
+    workLogCalendarDto.setCalMonth(workLogCalendarDto.getCalDate().substring(0, 7));
+
+    // 만약 ROLE 이 STAFF 면 세션에서 loginId 정보를 꺼내서 조회에 이용 아니면 그냥 빈 값으로 조회
+    if(CommonUtils.getSession().getAttribute("loginMemberRole").toString().equals(Role.STAFF.toString())) {
+      workLogCalendarDto.setRegId(CommonUtils.getSession().getAttribute("loginId").toString());
+    }
+
+    List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarMapper.selectWorkLogAndCalendarList(workLogCalendarDto.toEntity());
+    if (!workLogCalendarDtoList.isEmpty()) {
+      workLogCalendarDtoList.forEach(dto -> dto.setCalDayName(LocalDate.parse(dto.getCalDate()).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN)));
+    }
+    return workLogCalendarDtoList;
+  }
+
+  public String selectPrevWorkLogCalendar(WorkLogCalendarDto workLogCalendarDto) {
+    LocalDate prevMonthDate = getPrevMonthDate(workLogCalendarDto);
+
+    WorkLogCalendarDto newWorkLogCalendarDto = new WorkLogCalendarDto();
+    String prevMonthValue = prevMonthDate.toString().substring(0, 7);
+    newWorkLogCalendarDto.setCalMonth(prevMonthValue);
+
+    boolean result = !workLogCalendarMapper.selectWorkLogCalendarList(newWorkLogCalendarDto.toEntity()).isEmpty();
+
+    return result ? prevMonthValue : null;
+  }
+
+  private static LocalDate getPrevMonthDate(WorkLogCalendarDto workLogCalendarDto) {
     String calDateStr = null;
     if(!Objects.isNull(workLogCalendarDto)){
       calDateStr = workLogCalendarDto.getCalMonth();
@@ -64,14 +111,7 @@ public class WorkLogCalendarService {
       String[] calDateArr = calDateStr.split("-");
       prevMonthDate = LocalDate.of(Integer.parseInt(calDateArr[0]), Integer.parseInt(calDateArr[1]), 1).minusDays(1);
     }
-
-    WorkLogCalendarDto newWorkLogCalendarDto = new WorkLogCalendarDto();
-    String prevMonthValue = prevMonthDate.toString().substring(0, 7);
-    newWorkLogCalendarDto.setCalMonth(prevMonthValue);
-
-    boolean result = !workLogCalendarMapper.selectWorkLogCalendarList(newWorkLogCalendarDto.toEntity()).isEmpty();
-
-    return result ? prevMonthValue : null;
+    return prevMonthDate;
   }
 
   public String selectNextWorkLogCalendarList(WorkLogCalendarDto workLogCalendarDto) {
@@ -100,6 +140,10 @@ public class WorkLogCalendarService {
     workLogCalendarMapper.insertWorkLogCalendar(workLogCalendarDto.toEntity());
   }
 
+  public boolean updateWorkLogCalendar(WorkLogCalendarUpdateDto workLogCalendarUpdateDto) {
+    return workLogCalendarMapper.updateWorkLogCalendar(workLogCalendarUpdateDto.toEntity()) > 0;
+  }
+
   public boolean manualInsertWorkLogCalendar(String calMonth) {
     // year, month 가 다 있는지 확인
     // year는 숫자 형태인지 확인 -> String 으로 변환한 뒤에도 4자리인지 확인
@@ -118,7 +162,7 @@ public class WorkLogCalendarService {
     workLogCalendarDto.setCalMonth(calDate.withDayOfMonth(1).toString().substring(0, 7));
 
     // workLogCalendarList 가 존재하는지 확인
-    List<WorkLogCalendarDto> workLogCalendarDtoList = selectWorkLogCalendarList(workLogCalendarDto);
+    List<WorkLogCalendarDto> workLogCalendarDtoList = selectWorkLogCalendarListUsingCalDate(workLogCalendarDto);
     if (workLogCalendarDtoList.isEmpty()) {
       procedureInsertWorkLogCalendar(calDate);
       return true;
