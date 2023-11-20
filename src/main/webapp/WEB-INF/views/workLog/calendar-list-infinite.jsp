@@ -22,6 +22,8 @@
   <script src="/js/libs/jquery-3.7.0.min.js"></script>
   <script src="/js/common/common.js"></script>
   <script>
+    const memberRole = '${role}';
+
     $(function() {
       let availableToLoadList = true;
       $(window).on('scroll', async function () {
@@ -35,6 +37,7 @@
             const ajaxResult = await getArticleList($('.day-article:last').parent().data('calDate'));
 
             if(typeof ajaxResult === 'undefined'){
+              $('.container').children(':last').height($('.container').children(':last').height() + 100);
               return null;
             }
 
@@ -51,43 +54,72 @@
               $outerDiv.get(0).dataset.active = active;
               $outerDiv.get(0).dataset.calDate = calendarObj.calDate;
 
-              const $coreDiv = $('<div>').css({width: '100%', border: '1px solid darkgrey', minWidth: '60%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',}).addClass('day-article');
+              const $coreDiv = $('<div>').css({border: '1px solid darkgrey', minWidth: '60%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',}).addClass('day-article');
+              $coreDiv.css({width: memberRole === 'STAFF' ? '75%' : '100%', });
               const $innerFirstDiv = $('<div>').css({width: '55%', paddingLeft: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',});
               if (active === 'N') $innerFirstDiv.css('color', 'red');
 
               const $innerFirstCoreDiv = $('<div>').text(calendarObj.calDate + ' ' + calendarObj.calDayName);
-              const $innerFirstCoreBtn = $('<button>').text(active === 'Y' ? '휴무일 전환' : '근무일 전환').on('click', updateCalendar);
-              $innerFirstCoreBtn.get(0).dataset.calDate = calendarObj.calDate;
-              $innerFirstCoreBtn.get(0).dataset.calMonth = calendarObj.calMonth;
-              $innerFirstCoreBtn.get(0).dataset.active = calendarObj.active === 'Y' ? 'N' : 'Y';
-
               $innerFirstDiv.append($innerFirstCoreDiv);
-              $innerFirstDiv.append($innerFirstCoreBtn);
+
+              if(memberRole !== 'STAFF') {
+                const $innerFirstCoreBtn = $('<button>').text(active === 'Y' ? '휴무일 전환' : '근무일 전환').on('click', updateCalendar);
+                $innerFirstCoreBtn.get(0).dataset.calDate = calendarObj.calDate;
+                $innerFirstCoreBtn.get(0).dataset.calMonth = calendarObj.calMonth;
+                $innerFirstCoreBtn.get(0).dataset.active = calendarObj.active === 'Y' ? 'N' : 'Y';
+                $innerFirstDiv.append($innerFirstCoreBtn);
+              }
 
               $coreDiv.append($innerFirstDiv);
 
+              const $coreSecondDiv = $('<div>').css({width: '250px', margin: 'auto 0',});
+
               if (active === 'Y') {
-                const $innerSecondDiv = $('<div>').css({width: '40%',});
+                const $innerSecondDiv = $('<div>').css(memberRole === 'STAFF' ? {width: '32%', textAlign: 'right', paddingRight: '20px', color: 'red',} : {width: '40%',});
+
                 for(const logObj of logList){
                   if(calendarObj.calDate === logObj.calDate ){
-                    const $innerSecondCoreDiv = $('<div>').css({border: '1px solid darkgrey', margin: '5px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',});
-                    $innerSecondCoreDiv.css({color: logObj.contentActive === 'Y' ? 'green' : 'red'});
-                    const $innerSecondCoreDivFirstSpan = $('<span>').css({margin: '5px',}).text(logObj.contentRegName);
+                    if(memberRole === 'MANAGER'){
+                      const $innerSecondCoreDiv = $('<div>').css({border: '1px solid darkgrey', margin: '5px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',});
+                      $innerSecondCoreDiv.css({color: logObj.contentActive === 'Y' ? 'green' : 'red'});
+                      const $innerSecondCoreDivFirstSpan = $('<span>').css({margin: '5px',}).text(logObj.contentRegName);
+                      // 미작성 elem 생성
+                      const $innerSecondCoreDivSecondSpan = $('<span>').css({padding: '5px', color: 'red',}).text('미작성');
+                      // 보기 버튼 elem 생성
+                      const $innerSecondCoreDivBtn = $('<button>').css({margin: '5px',}).prop('type', 'button').text('보기').on('click', () => location.href=`/work-log/view?workLogSeq=\${logObj.contentSeq}`);
 
-                    const $innerSecondCoreDivSecondSpan = $('<span>').css({padding: '5px', color: 'red',}).text('미작성');
-                    const $innerSecondCoreDivBtn = $('<button>').css({margin: '5px',}).text('보기').on('click', () => location.href=`/work-log/view?workLogSeq=\${logObj.contentSeq}`);
+                      $innerSecondCoreDiv.append($innerSecondCoreDivFirstSpan);
+                      $innerSecondCoreDiv.append(logObj.contentActive === 'Y' ? $innerSecondCoreDivBtn : $innerSecondCoreDivSecondSpan);
 
-                    $innerSecondCoreDiv.append($innerSecondCoreDivFirstSpan);
-                    $innerSecondCoreDiv.append(logObj.contentActive === 'Y' ? $innerSecondCoreDivBtn : $innerSecondCoreDivSecondSpan);
+                      $innerSecondDiv.append($innerSecondCoreDiv);
+                    }
 
-                    $innerSecondDiv.append($innerSecondCoreDiv);
-
+                    if(memberRole === 'STAFF') {
+                      $innerSecondDiv.text(logObj.contentActive === 'Y' ? '작성 완료' : '미작성').css({color: logObj.contentActive === 'Y' ? 'green' : 'red'});
+                      // 수정, 삭제 버튼 elem 생성
+                      if(logObj.contentActive === 'Y'){
+                        const modBtn = $('<button>').css({backgroundColor: "#ffffec", marginLeft: "5px",}).text('수정').on('click', () => location.href=`/work-log/update?workLogSeq=\${logObj.contentSeq}`);
+                        const delBtn = $('<button>').css({backgroundColor: "#faf0f0", marginLeft: "5px",}).text('삭제').on('click', () => deleteArticle(logObj.contentSeq));
+                        $coreSecondDiv.append(modBtn)
+                        $coreSecondDiv.append(delBtn)
+                      }
+                      // 등록 버튼 elem 생성
+                      if(logObj.contentActive !== 'Y'){
+                        const regBtn = $('<button>').css({backgroundColor: "#e3efff", marginLeft: "5px",}).text('등록').on('click', () => location.href=`/work-log/add?workLogDate=\${calendarObj.calDate}`);
+                        $coreSecondDiv.append(regBtn);
+                      }
+                    }
                   }
                 }
+
                 $coreDiv.append($innerSecondDiv);
               }
 
               $outerDiv.append($coreDiv);
+
+              if(memberRole === 'STAFF'){
+                $outerDiv.append($coreSecondDiv);
+              }
 
               $divWrapper.append($outerDiv);
             }
@@ -113,7 +145,7 @@
           return data;
         },
         error: data => {
-          alert('더 이상 데이터가 존재하지 않습니다')
+          alert(data.description)
           return null;
         },
       }
@@ -143,6 +175,7 @@
           }
         },
         error: function(data) {
+          console.log(data);
           alert(data.description);
         }
       }
@@ -207,9 +240,13 @@
         <c:forEach items="${list}" var="item">
           <c:if test="${currDate >= item.calDate}">
             <div style="display: flex; justify-content: left; margin-bottom: 10px;" data-active="${item.active}" data-cal-date="${item.calDate}">
-              <div class="day-article" style="width: 82%; border: 1px solid darkgrey; min-width: 60%; display: flex; justify-content: space-between; padding: 0; <c:if test="${!empty item.contentActive}"> cursor: pointer; </c:if> " <c:if test="${!empty item.contentSeq}"> onclick="location.href='/work-log/view?workLogSeq=${item.contentSeq}'" </c:if> >
-                <span style="padding-left: 20px; <c:if test="${item.active.equals('N')}">color: red</c:if>" >${item.calDate} ${item.calDayName} <c:if test="${empty item.contentSeq}">${item.contentRegName}</c:if></span>
-                <c:if test="${(item.active.equals('Y')) && !empty item.contentSeq}"><span style="padding-right: 20px;" >${item.contentRegName}</span></c:if>
+              <div class="day-article" style="width: 75%; border: 1px solid darkgrey; min-width: 60%; display: flex; justify-content: space-between; padding: 0; <c:if test="${!empty item.contentActive}"> cursor: pointer; </c:if> " <c:if test="${!empty item.contentSeq}"> onclick="location.href='/work-log/view?workLogSeq=${item.contentSeq}'" </c:if> >
+                <div style="width: 55%; padding-left: 20px; display: flex; justify-content: space-between; align-items: center; <c:if test="${item.active.equals('N')}">color: red</c:if>" >
+                  <div>${item.calDate} ${item.calDayName}</div>
+                </div>
+                <c:if test="${!(item.calDayName.equals('토') || item.calDayName.equals('일'))}">
+                  <div style="width: 32%; text-align: right; padding-right: 20px; color:${item.contentActive.equals('Y') ? 'green' : 'red'}" >${item.contentActive.equals('Y') ? '작성 완료' : '미작성'}</div>
+                </c:if>
               </div>
               <div style="width: 250px; margin: auto 0">
                 <c:if test="${item.active.equals('Y')}">
@@ -231,7 +268,6 @@
       <c:if test="${role.equals('MANAGER')}">
         <c:forEach items="${calendarList}" var="item">
           <c:if test="${currDate >= item.calDate}">
-<%--            <div style="display: flex; justify-content: left; margin-bottom: 10px;" data-active="${item.active}" data-cal-month="${item.calMonth}">--%>
             <div style="display: flex; justify-content: left; margin-bottom: 10px;" data-active="${item.active}" data-cal-date="${item.calDate}">
               <div class="day-article" style="width: 100%; border: 1px solid darkgrey; min-width: 60%; display: flex; justify-content: space-between; align-items: center; " >
                 <div style="width: 55%; padding-left: 20px; display: flex; justify-content: space-between; align-items: center; <c:if test="${item.active.equals('N')}">color: red</c:if>" >
