@@ -1,6 +1,8 @@
 package com.cmw.kd.workLog.service;
 
 import com.cmw.kd.workLog.model.WorkLogCalendarDto;
+import com.cmw.kd.workLog.model.WorkLogCalendarUpdateDto;
+import com.cmw.kd.workLog.model.WorkLogCalendarUpdateDto.WorkLogCalendarUpdateVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,4 +16,6 @@ public interface WorkLogCalendarMapper {
   List<WorkLogCalendarDto> selectWorkLogAndCalendarList(WorkCalendarVo workCalendarVo);
 
   void insertWorkLogCalendar(WorkCalendarVo workCalendarVo);
+
+  int updateWorkLogCalendar(WorkLogCalendarUpdateVo workLogCalendarUpdateVo);
 }

@@ -21,6 +21,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
       .excludePathPatterns("/auth/login", "/auth/logout", "/member/dummy");
 
     registry.addInterceptor(managerCheckInterceptor)
-      .addPathPatterns("/work-log-calendar/add");
+      .addPathPatterns("/work-log-calendar/add", "/work-log-calendar/update");
   }
 }

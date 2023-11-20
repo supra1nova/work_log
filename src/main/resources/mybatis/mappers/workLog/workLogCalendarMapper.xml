@@ -40,4 +40,11 @@
       , #{active}
     )
   </insert>
+
+  <update id="updateWorkLogCalendar">
+    UPDATE TB_WORK_LOG_CALENDAR
+     SET
+      ACTIVE = #{active}
+    WHERE CAL_DATE = #{calDate}
+  </update>
 </mapper>
