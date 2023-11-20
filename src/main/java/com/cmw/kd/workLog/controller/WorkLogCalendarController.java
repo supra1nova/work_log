@@ -30,9 +30,11 @@ public class WorkLogCalendarController {
 
 //  @GetMapping({"", "/"})
   public String getWorkLogCalendarList(@ModelAttribute WorkLogCalendarDto workLogCalendarDto, Model model) {
-    List<WorkLogCalendarDto> calendarDtoList = workLogCalendarService.selectWorkLogCalendarList(workLogCalendarDto);
-    List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarService.selectWorkLogAndCalendarList(workLogCalendarDto);
-    String prevMonthValue = workLogCalendarService.selectPrevWorkLogCalendarList(workLogCalendarDto);
+    List<WorkLogCalendarDto> calendarDtoList = workLogCalendarService.selectWorkLogCalendarListUsingCalMonth(workLogCalendarDto);
+    if(calendarDtoList.isEmpty()) return "redirect:/";
+
+    List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarService.selectWorkLogAndCalendarListUsingCalMonth(workLogCalendarDto);
+    String prevMonthValue = workLogCalendarService.selectPrevWorkLogCalendar(workLogCalendarDto);
     String nextMonthValue = workLogCalendarService.selectNextWorkLogCalendarList(workLogCalendarDto);
 
     model.addAttribute("calendarList", calendarDtoList);
@@ -44,7 +46,7 @@ public class WorkLogCalendarController {
     model.addAttribute("nextMonth", StringUtils.isNotBlank(nextMonthValue));
     model.addAttribute("nextMonthValue", nextMonthValue);
 
-    return calendarDtoList.isEmpty() ? "redirect:/" : "workLog/calendar-list";
+    return "workLog/calendar-list";
   }
 
   @GetMapping({"", "/"})
