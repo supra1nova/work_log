@@ -28,11 +28,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WorkLogCalendarController {
   private final WorkLogCalendarService workLogCalendarService;
 
-  @GetMapping({"", "/"})
+//  @GetMapping({"", "/"})
   public String getWorkLogCalendarList(@ModelAttribute WorkLogCalendarDto workLogCalendarDto, Model model) {
-    List<WorkLogCalendarDto> calendarDtoList = workLogCalendarService.selectWorkLogCalendarList(workLogCalendarDto);
-    List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarService.selectWorkLogAndCalendarList(workLogCalendarDto);
-    String prevMonthValue = workLogCalendarService.selectPrevWorkLogCalendarList(workLogCalendarDto);
+    List<WorkLogCalendarDto> calendarDtoList = workLogCalendarService.selectWorkLogCalendarListUsingCalMonth(workLogCalendarDto);
+    if(calendarDtoList.isEmpty()) return "redirect:/";
+
+    List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarService.selectWorkLogAndCalendarListUsingCalMonth(workLogCalendarDto);
+    String prevMonthValue = workLogCalendarService.selectPrevWorkLogCalendar(workLogCalendarDto);
     String nextMonthValue = workLogCalendarService.selectNextWorkLogCalendarList(workLogCalendarDto);
 
     model.addAttribute("calendarList", calendarDtoList);
@@ -44,7 +46,69 @@ public class WorkLogCalendarController {
     model.addAttribute("nextMonth", StringUtils.isNotBlank(nextMonthValue));
     model.addAttribute("nextMonthValue", nextMonthValue);
 
-    return calendarDtoList.isEmpty() ? "redirect:/" : "workLog/calendar-list";
+    return "workLog/calendar-list";
+  }
+
+  @GetMapping({"", "/"})
+  public String getWorkLogCalendarListInfinite(@ModelAttribute WorkLogCalendarDto workLogCalendarDto, Model model) {
+    List<WorkLogCalendarDto> calendarDtoList = workLogCalendarService.selectWorkLogCalendarListUsingCalDate(workLogCalendarDto);
+    if(calendarDtoList.isEmpty()) return "redirect:/";
+
+    List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarService.selectPrevWorkLogAndCalendarListUsingCalDate(workLogCalendarDto);
+
+    model.addAttribute("calendarList", calendarDtoList);
+    model.addAttribute("list", workLogCalendarDtoList);
+    model.addAttribute("role", CommonUtils.getSession().getAttribute("loginMemberRole").toString());
+
+    return "workLog/calendar-list-infinite";
+  }
+
+  @GetMapping("/list")
+  @ResponseBody
+  public ResponseEntity<ResponseDto<?>> getPreviousWorkLogCalendarListProc(@ModelAttribute WorkLogCalendarDto workLogCalendarDto, BindingResult errors) {
+    boolean result = false;
+    String description = "작업에 실패했습니다";
+    String callback = "location.href='/work-log-calendar?calMonth=" + workLogCalendarDto.getCalMonth() + "'";
+    Object data = null;
+
+    if (errors.hasErrors()) {
+      final String prefix = "invalid_";
+      Map<String, String> errorMap = new ConcurrentHashMap<>();
+      for(FieldError err: errors.getFieldErrors()){
+        errorMap.put(String.format(prefix + "%s", err.getField()), err.getDefaultMessage());
+      }
+      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ResponseDto.builder().result(result).description(description).invalidMessage(errorMap).callback(callback).build());
+    }
+
+    try {
+      List<WorkLogCalendarDto> calendarDtoList = workLogCalendarService.selectWorkLogCalendarListUsingCalDate(workLogCalendarDto);
+      List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarService.selectPrevWorkLogAndCalendarListUsingCalDate(workLogCalendarDto);
+      String prevMonth = workLogCalendarService.selectPrevWorkLogCalendar(workLogCalendarDto);
+
+      Map<String, Object> mapToSend = new ConcurrentHashMap<>();
+      mapToSend.put("calendarList", calendarDtoList);
+      mapToSend.put("list", workLogCalendarDtoList);
+      mapToSend.put("hasPrevMonth", StringUtils.isNotBlank(prevMonth));
+      if(StringUtils.isNotBlank(prevMonth)){
+        mapToSend.put("prevMonth", prevMonth);
+      }
+
+      if (!calendarDtoList.isEmpty()) {
+        result = true;
+        data = mapToSend;
+      }
+    } catch (RuntimeException e) {
+      description = e.getMessage();
+    }
+
+    if (result) {
+      description = "작업에 성공했습니다";
+      return ResponseEntity.ok(ResponseDto.builder().result(result).description(description).data(data).callback(callback).build());
+//      return ResponseEntity.accepted().body(ResponseDto.builder().result(result).description(description).callback(callback).build());
+    }
+
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseDto.builder().result(result).description(description).callback(callback).build());
+//    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto.builder().result(result).description(description).callback(callback).build());
   }
 
   @GetMapping("/add/{calMonth}")
