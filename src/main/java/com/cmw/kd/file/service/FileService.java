@@ -32,8 +32,8 @@ public class FileService {
 
   private final FileMapper fileMapper;
 
-  public void insertFile(FileDto fileDto) {
-    fileMapper.insertFile(fileDto.toEntity());
+  public boolean insertFile(FileDto fileDto) {
+    return fileMapper.insertFile(fileDto.toEntity()) > 0;
   }
 
   public FileDto selectFile(FileDto fileDto) {
@@ -42,7 +42,7 @@ public class FileService {
 
   // TODO: valid checking for file extension
   // TODO: return get method url
-  public String uploadFiles(CommonDto commonDto, String uploadDir) throws IOException {
+  public void uploadFiles(CommonDto commonDto, String uploadDir) throws IOException {
     List<MultipartFile> multipartFileList = commonDto.getUploadFileList();
 
     if (!multipartFileList.isEmpty()) {
@@ -68,20 +68,17 @@ public class FileService {
           String uploadFilePathStr = Paths.get(uploadDirectoryPathStr, targetFileName).toString();
           multipartFile.transferTo(new File(uploadFilePathStr));
 
+          fileDto.setBbsSeq(commonDto.getSeq());
           fileDto.setFileSourceName(multipartFile.getOriginalFilename());
           fileDto.setFileTargetName(targetFileName);
           fileDto.setFileTargetPath(uploadDir);
           fileDto.setFileSize(multipartFile.getSize());
           fileDto.setRegId(commonDto.getRegId());
 
-          insertFile(fileDto);
-
-          return "/toast-ui-bbs/display-image/" + targetFileName;
+          if(!insertFile(fileDto)) throw new IOException("파일 업로드가 실패했습니다");
         }
       }
     }
-
-    return null;
   }
 
   public ResponseEntity<Resource> displayImage(FileDto fileDto, String uploadDir) throws IOException {

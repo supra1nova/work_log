@@ -48,7 +48,7 @@
           const toolbarContainer = $('#toolbar-container').get(0);
           toolbarContainer.appendChild( insEditor.ui.view.toolbar.element );
 
-          insEditor.setData(`${info.workLogContent}`)
+          insEditor.setData(`<p>${info.workLogContent}</p>`)
 
           // html 스펠 체크 해제 이벤트
           insEditor.editing.view.change( writer => {

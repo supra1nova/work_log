@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmw.kd.file.service.FileMapper">
+  <select id="selectFileList" resultType="com.cmw.kd.file.model.FileDto">
+    SELECT *
+    FROM TB_FILE
+    <where>
+      AND BBS_SEQ = #{bbsSeq}
+      AND ACTIVE = 'Y'
+    </where>
+  </select>
+
+  <insert id="insertFile">
+    <selectKey resultType="Integer" order="BEFORE" keyProperty="fileSeq">
+      SELECT IFNULL(Max(FILE_SEQ) + 1, 1) FROM TB_FILE
+    </selectKey>
+    INSERT INTO TB_FILE(
+      FILE_SEQ
+      , BBS_SEQ
+      , FILE_SOURCE_NAME
+      , FILE_TARGET_NAME
+      , FILE_TARGET_PATH
+      , FILE_EXT
+      , FILE_SIZE
+      , REG_ID
+    ) VALUES (
+      #{fileSeq}
+      , #{bbsSeq}
+      , #{fileSourceName}
+      , #{fileTargetName}
+      , #{fileTargetPath}
+      , #{fileExt}
+      , #{fileSize}
+      , IFNULL(#{regId}, "MASTER")
+    )
+  </insert>
+
+  <select id="selectFile" resultType="com.cmw.kd.file.model.FileDto">
+    SELECT *
+    FROM TB_FILE
+    <where>
+      AND BBS_SEQ = #{bbsSeq}
+      AND FILE_TARGET_NAME = #{fileTargetName}
+      AND ACTIVE = 'Y'
+    </where>
+  </select>
+
+  <select id="deleteFile">
+    UPDATE TB_FILE
+    SET
+      ACTIVE = 'N'
+    <where>
+      AND BBS_SEQ = #{bbsSeq}
+      AND FILE_TARGET_NAME = #{fileTargetName}
+    </where>
+  </select>
+</mapper>

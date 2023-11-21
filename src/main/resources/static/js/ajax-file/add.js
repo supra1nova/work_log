@@ -1,60 +1,22 @@
 $(function(){
   // 파일 선택 이벤트
-  $('#tempFileUpload').on('change', addFiles)
+  $('#tempFileUpload').on('change', () => CommonUtils.generateUploadedFileTag($('#fileUpload').get(0), $('.addFileList').get(0)));
 
   // 파일 삭제 이벤트
-  $(document).on('click', '.addFileList > div', removeFile)
+  $(document).on('click', '.addFileList > div', event => CommonUtils.removeUploadedFileTag(event, $('#fileUpload').get(0), $('.addFileList').get(0), 'div'));
 })
 
-// 파일 선택 함수
-const addFiles = e => {
-  const tempFileArr = $(e.currentTarget)[0].files;
-
-  const sourceFiles = $('#fileUpload')[0].files;
-  const dataTransfer = new DataTransfer();
-
-  Array.from(sourceFiles).forEach(file => dataTransfer.items.add(file));
-  Array.from(tempFileArr).forEach(file => dataTransfer.items.add(file));
-
-  for (let i = 0; i < tempFileArr.length; i++) {
-    $('.addFileList').append(`<div><span style="background-color: red; display: inline-block; width: 18px; height: 18px; text-align: center; color: white; font-weight: bolder; border-radius: 5px">-</span>&nbsp;<span style="cursor: pointer">${tempFileArr[i].name}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 12px">${tempFileArr[i].size} byte</span><div>`)
-  }
-
-  $('#fileUpload')[0].files = dataTransfer.files;
-
-  $('#tempFileUpload')[0].files = new DataTransfer().files;
-}
-
-// 파일 삭제 함수
-const removeFile = e => {
-  const fileIdx = $('.addFileList > div').index(e.currentTarget);
-
-  const sourceFiles = $('#fileUpload')[0].files;
-
-  const dataTransfer = new DataTransfer();
-
-  const sourceFileArr = Array.from(sourceFiles);
-  sourceFileArr.splice(fileIdx, 1);
-  sourceFileArr.forEach(sourceFile => dataTransfer.items.add(sourceFile));
-
-  $('#fileUpload')[0].files = dataTransfer.files;
-
-  $(e.currentTarget).remove();
-}
-
+/**
+ * 글 및 이미지 저장 함수
+ * @param {String} additionalContentFieldName form data에 추가로 저장될 parameter name
+ * @param {String} additionalContent form data에 추가로 저장될 parameter value
+ *
+ */
 const saveData = (additionalContentFieldName = undefined, additionalContent= undefined) => {
   const $form = $('form[method=post]');
   const $formData = new FormData($form[0]);
 
-  if (
-    (
-      typeof additionalContentFieldName !== "undefined" ||  additionalContentFieldName !== null || additionalContentFieldName !== ""
-    )
-    &&
-    (
-      typeof additionalContent !== "undefined" ||  additionalContent !== null || additionalContent !== ""
-    )
-  ) {
+  if (( typeof additionalContentFieldName !== "undefined" ||  additionalContentFieldName !== null || additionalContentFieldName !== "" ) && ( typeof additionalContent !== "undefined" ||  additionalContent !== null || additionalContent !== "" )) {
     $formData.append(additionalContentFieldName, additionalContent);
   }
 
