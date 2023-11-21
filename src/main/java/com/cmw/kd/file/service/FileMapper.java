@@ -1,12 +1,20 @@
 package com.cmw.kd.file.service;
 
+import com.cmw.kd.core.commonDto.CommonDto;
 import com.cmw.kd.file.model.FileDto;
+import com.cmw.kd.file.model.FileDto.FileVo;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface FileMapper {
 
-  void insertFile(FileDto.FileVo fileVo);
+  List<FileDto> selectFileList(CommonDto commonDto);
 
-  FileDto selectFile(FileDto.FileVo fileVo);
+  int insertFile(FileVo fileVo);
+
+  FileDto selectFile(FileVo fileVo);
+
+  void deleteFile(FileVo fileVo);
 }

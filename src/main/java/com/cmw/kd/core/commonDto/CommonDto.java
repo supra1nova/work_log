@@ -2,6 +2,7 @@ package com.cmw.kd.core.commonDto;
 
 import com.cmw.kd.core.utils.CommonUtils;
 import com.cmw.kd.core.utils.annotation.MultipartFileList;
+import com.cmw.kd.workLog.model.WorkLogDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,6 +44,12 @@ public class CommonDto {
     updId = loginId;
     regName = loginMemberName;
     updName = loginMemberName;
+  }
+
+  public void setMemberInfoAndFileList(WorkLogDto workLogDto) {
+    setSeq(workLogDto.getWorkLogSeq());
+    setUploadFileList(workLogDto.getUploadFileList());
+    setMemberInfo();
   }
 
   public CommonVo toEntity() {
