@@ -163,7 +163,7 @@ public class WorkLogController {
     String fileUrl = null;
 
     try {
-      fileUrl = fileService.uploadFiles(commonDto, "content-image");
+//      fileUrl = fileService.uploadFiles(commonDto, "content-image");
     } catch (Exception e) {
       log.error(e.getMessage());
       description = e.getMessage();
