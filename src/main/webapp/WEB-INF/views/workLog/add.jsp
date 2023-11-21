@@ -108,7 +108,6 @@
   </script>
 </head>
 <body>
-
 <div class="container">
   <div>Work log add page</div>
 
@@ -127,11 +126,17 @@
       <button type="button" class="custom-button" id="saveBtn">저장</button>
       <button type="button" class="custom-button" onclick="location.href=document.referrer">취소</button>
     </div>
+
+    <div class="mb10" style="border: 1px solid #ccced1; min-height: 100px; padding: 5px; border-radius: 5px; margin-top: 5px">
+      <div>
+        <input type="file" name="uploadFileList" multiple readonly hidden id="fileUpload">
+        <input type="file" multiple readonly hidden id="tempFileUpload">
+        <label for="tempFileUpload" style="font-weight: bolder; cursor: pointer">+ 파일 업로드</label>
+      </div>
+      <div class="addFileList" style="display: flex; flex-direction: column; justify-content: left"></div>
+    </div>
   </form>
 
-  <div id="test1"></div>
-
 </div>
-
 </body>
 </html>
