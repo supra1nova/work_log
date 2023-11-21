@@ -11,6 +11,7 @@
 <head>
   <title>Work log add</title>
   <link href="/css/style.css" rel="stylesheet">
+  <link rel="icon" href="data:image/x-icon" type="image/x-icon">
   <style>
     .ck-editor__editable_inline:not(.ck-comment__input *) {
       /*height: 500px;*/
@@ -49,7 +50,7 @@
           toolbarContainer.appendChild( insEditor.ui.view.toolbar.element );
 
           // insEditor.setData(`<p>test</p>`)
-          insEditor.setData(`\${testArea}`)
+          insEditor.setData(`<p>\${testArea}</p>`)
 
           // html 스펠 체크 해제 이벤트
           insEditor.editing.view.change( writer => {
@@ -63,8 +64,7 @@
       $('#saveBtn').on('click', () => saveData("workLogContent", $('#editor').get(0).innerHTML))
     })
 
-    let testArea = `<p>
-      <table style="border: none; width: 100%;">
+    let testArea = `<table style="border: none; width: 100%;">
         <colgroup>
           <col style="width: 15%; min-width: 100px">
           <col style="width: 25%">
@@ -102,9 +102,7 @@
             <td class="ck-editor__editable ck-editor__nested-editable" role="textbox" contenteditable="true" colspan="7" style="vertical-align: top; height: 300px"></td>
           </tr>
         </tbody>
-      </table>
-      </p>
-    `;
+      </table>`;
   </script>
 </head>
 <body>
@@ -116,9 +114,7 @@
       <div id="toolbar-container"></div>
 
       <div class="editor-container">
-        <div id="editor">
-          <p>This is the initial editor content.</p>
-        </div>
+        <div id="editor"></div>
       </div>
     </div>
 
