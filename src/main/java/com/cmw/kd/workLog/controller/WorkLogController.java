@@ -13,19 +13,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Controller
@@ -52,14 +49,13 @@ public class WorkLogController {
   }
 
   @GetMapping("/view")
-  public String getWorkLog(Integer workLogSeq, Model model){
-    WorkLogDto workLogDto = workLogService.selectWorkLog(workLogSeq);
-    if(Objects.isNull(workLogDto)){
+  public String getWorkLog(WorkLogDto workLogDto, Model model){
+    WorkLogDto resultDto = workLogService.selectWorkLog(workLogDto);
+    if(resultDto == null){
       return "redirect:/work-log-calendar";
     }
-    model.addAttribute("info", workLogDto);
-    model.addAttribute("memberId", CommonUtils.getSession().getAttribute("loginId").toString());
-    model.addAttribute("fileList", fileService.selectFileList(workLogDto));
+    model.addAttribute("info", resultDto);
+    model.addAttribute("fileList", fileService.selectFileList(resultDto));
 
     return "workLog/view";
   }
@@ -99,9 +95,9 @@ public class WorkLogController {
   }
 
   @GetMapping("/update")
-  public String updateWorkLog(Integer workLogSeq, Model model){
-    WorkLogDto workLogDto = workLogService.selectWorkLog(workLogSeq);
-    model.addAttribute("info", workLogDto);
+  public String updateWorkLog(WorkLogDto workLogDto, Model model){
+    WorkLogDto resultDto = workLogService.selectWorkLog(workLogDto);
+    model.addAttribute("info", resultDto);
     return "workLog/update";
   }
 

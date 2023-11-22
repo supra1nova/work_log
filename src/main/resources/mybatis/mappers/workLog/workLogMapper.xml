@@ -44,7 +44,7 @@
     LIMIT #{pagination.rowNum}, #{pagination.listLimit}
   </select>
 
-  <select id="selectWorkLog" parameterType="int" resultType="com.cmw.kd.workLog.model.WorkLogDto">
+  <select id="selectWorkLog" resultType="com.cmw.kd.workLog.model.WorkLogDto">
     SELECT *
     FROM TB_WORK_LOG
     WHERE

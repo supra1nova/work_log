@@ -30,12 +30,12 @@ public class WorkLogService {
     return workLogMapper.selectWorkLogList(searchDto);
   }
 
-  public WorkLogDto selectWorkLog(Integer workLogSeq){
-    WorkLogDto workLogDto = workLogMapper.selectWorkLog(workLogSeq);
-    if(CommonUtils.getSession().getAttribute("loginMemberRole").equals(Role.STAFF.toString()) && !CommonUtils.getSession().getAttribute("loginId").equals(workLogDto.getRegId())){
-      workLogDto = null;
+  public WorkLogDto selectWorkLog(WorkLogDto workLogDto){
+    WorkLogDto resultDto = workLogMapper.selectWorkLog(workLogDto.toEntity());
+    if(CommonUtils.getSession().getAttribute("loginMemberRole").equals(Role.STAFF.toString()) && !CommonUtils.getSession().getAttribute("loginId").equals(resultDto.getRegId())){
+      resultDto = null;
     }
-    return workLogDto;
+    return resultDto;
   }
 
   public boolean insertWorkLog(WorkLogDto workLogDto) throws IOException {
