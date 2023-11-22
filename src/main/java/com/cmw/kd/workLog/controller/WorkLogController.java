@@ -73,8 +73,7 @@ public class WorkLogController {
   }
 
   @PostMapping("/add")
-  @ResponseBody
-  public ResponseDto<?> addWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto, BindingResult errors){
+  public @ResponseBody ResponseDto<?> addWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto, BindingResult errors){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
     String callback = null;
@@ -112,8 +111,7 @@ public class WorkLogController {
   }
 
   @PostMapping("/update")
-  @ResponseBody
-  public ResponseDto<?> updateWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto, BindingResult errors){
+  public @ResponseBody ResponseDto<?> updateWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto, BindingResult errors){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
     String callback = null;
@@ -144,8 +142,7 @@ public class WorkLogController {
   }
 
   @PostMapping("/delete")
-  @ResponseBody
-  public ResponseDto<?> deleteWorkLogProc(@RequestBody WorkLogDto workLogDto){
+  public @ResponseBody ResponseDto<?> deleteWorkLogProc(@RequestBody WorkLogDto workLogDto){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
     String callback = null;
@@ -166,8 +163,7 @@ public class WorkLogController {
   }
 
   @PostMapping("/add-image")
-  @ResponseBody
-  public ResponseDto<?> addImageProc(@ModelAttribute CommonDto commonDto) {
+  public @ResponseBody ResponseDto<?> addImageProc(@ModelAttribute CommonDto commonDto) {
     boolean result = false;
     String description = "이미지 등록에 실패했습니다";
     String fileUrl = null;

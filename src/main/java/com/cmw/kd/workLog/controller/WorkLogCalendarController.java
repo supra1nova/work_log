@@ -64,8 +64,7 @@ public class WorkLogCalendarController {
   }
 
   @GetMapping("/list")
-  @ResponseBody
-  public ResponseEntity<ResponseDto<?>> getPreviousWorkLogCalendarListProc(@ModelAttribute WorkLogCalendarDto workLogCalendarDto, BindingResult errors) {
+  public @ResponseBody ResponseEntity<ResponseDto<?>> getPreviousWorkLogCalendarListProc(@ModelAttribute WorkLogCalendarDto workLogCalendarDto, BindingResult errors) {
     boolean result = false;
     String description = "작업에 실패했습니다";
     String callback = "location.href='/work-log-calendar?calMonth=" + workLogCalendarDto.getCalMonth() + "'";
@@ -119,8 +118,7 @@ public class WorkLogCalendarController {
   }
 
   @PostMapping("/update")
-  @ResponseBody
-  public ResponseEntity<ResponseDto<?>> updateWorkLogCalendar(@Valid @RequestBody WorkLogCalendarUpdateDto workLogCalendarUpdateDto, BindingResult errors) {
+  public @ResponseBody ResponseEntity<ResponseDto<?>> updateWorkLogCalendar(@Valid @RequestBody WorkLogCalendarUpdateDto workLogCalendarUpdateDto, BindingResult errors) {
     boolean result = false;
     String description = "작업에 실패했습니다";
     String callback = "location.href='/work-log-calendar?calMonth=" + workLogCalendarUpdateDto.getCalMonth() + "'";
