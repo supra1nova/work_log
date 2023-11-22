@@ -28,8 +28,16 @@ const saveData = (additionalContentFieldName = undefined, additionalContent= und
       alert(data.description);
     }
   };
-  const error = () => {
-    alert("알 수 없는 에러가 발생했습니다");
+  const error = data => {
+    const result = data.responseJSON;
+    if(data.status === 406) {
+      // status 406 NOT_ACCEPTABLE 발생시 -> 반복문으로 validation error 가져와서 alert 에 표기;
+      const errorMsg = result.invalidMessage
+      alert( Object.values(errorMsg).join(', '));
+    } else {
+      //나머지 에러 발생 건에 대해서는 aleft 에 기본 description 메세지 표기
+      alert(result.description);
+    }
   }
   const options = {
     method: $form.prop("method"),
