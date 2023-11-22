@@ -14,7 +14,7 @@
   <script src="/js/libs/jquery-3.7.0.min.js"></script>
 </head>
 <body>
-<jsp:include page="../_include/header.jsp"/>
+<%@ include file="../_include/header.jsp" %>
 
 <div class="container">
   <div>Member add page</div>
