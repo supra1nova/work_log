@@ -121,6 +121,22 @@
     </div>
   </div>
 
+  <div>
+    <div>첨부파일</div>
+    <div>
+      <c:if test="${!empty fileList}">
+        <c:forEach items="${fileList}" var="file">
+          <div>
+            <a href="/work-log/download/${file.bbsSeq}/${file.fileTargetName}" target="_blank"><span style="display: inline-block; width: 18px; height: 18px; text-align: center; vertical-align: center; margin-top: 3px; background-color: dodgerblue; color: white; border-radius: 5px">&#8595;</span></a>
+            <a href="/work-log/download/${file.bbsSeq}/${file.fileTargetName}" target="_blank">${file.fileSourceName}</a>&nbsp;&nbsp;
+            <a href="/work-log/download/${file.bbsSeq}/${file.fileTargetName}" style="font-size: 12px" target="_blank">${file.fileSize} byte</a>
+          </div>
+        </c:forEach>
+      </c:if>
+    </div>
+  </div>
+
+
   <div class="tr mb150" >
     <c:if test="${memberId.equals(info.regId)}">
       <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/update?workLogSeq=${info.workLogSeq}'">수정</button>

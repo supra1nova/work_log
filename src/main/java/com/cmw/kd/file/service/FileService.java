@@ -2,6 +2,7 @@ package com.cmw.kd.file.service;
 
 import com.cmw.kd.core.commonDto.CommonDto;
 import com.cmw.kd.file.model.FileDto;
+import com.cmw.kd.workLog.model.WorkLogDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +32,12 @@ public class FileService {
   private String customFileInternalUploadPath;
 
   private final FileMapper fileMapper;
+
+  public List<FileDto> selectFileList(WorkLogDto workLogDto) {
+    FileDto fileDto = new FileDto();
+    fileDto.setBbsSeq(workLogDto.getWorkLogSeq());
+    return fileMapper.selectFileList(fileDto.toEntity());
+  }
 
   public boolean insertFile(FileDto fileDto) {
     return fileMapper.insertFile(fileDto.toEntity()) > 0;
@@ -91,6 +98,22 @@ public class FileService {
       .contentType(MediaType.APPLICATION_OCTET_STREAM)
       .cacheControl(CacheControl.noCache())
       .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.inline().filename(fileDtoResult.getFileTargetName(), StandardCharsets.UTF_8).build().toString())
+      .body(resource);
+  }
+
+
+  public ResponseEntity<Resource> downloadFile2(FileDto fileDto, String uploadDir) throws IOException {
+    FileDto fileDtoResult = selectFile(fileDto);
+
+    Path targetFile = Paths.get(customFileInternalUploadPath,  uploadDir, fileDtoResult.getFileTargetName());
+    Resource resource = new PathResource(targetFile);
+
+    return ResponseEntity.ok()
+      .contentType(MediaType.APPLICATION_OCTET_STREAM)
+      .cacheControl(CacheControl.noCache())
+//      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileDtoResult.getFileSourceName())
+      .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(fileDtoResult.getFileSourceName()).build().toString())
+      .contentLength(resource.contentLength())
       .body(resource);
   }
 }
