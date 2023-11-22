@@ -4,12 +4,16 @@ import com.cmw.kd.core.commonDto.CommonDto;
 import com.cmw.kd.core.commonDto.ResponseDto;
 import com.cmw.kd.core.commonDto.SearchDto;
 import com.cmw.kd.core.utils.CommonUtils;
+import com.cmw.kd.file.model.FileDto;
 import com.cmw.kd.file.service.FileService;
 import com.cmw.kd.workLog.model.WorkLogDto;
 import com.cmw.kd.workLog.service.WorkLogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +21,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -29,6 +34,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WorkLogController {
   private final FileService fileService;
   private final WorkLogService workLogService;
+
+  @Value("${custom.work-log-attach-dir-path}")
+  private String uploadFileDir;
 
   @GetMapping({"", "/", "/list"})
   public String getWorkLogList(@ModelAttribute SearchDto searchDto, Model model){
@@ -51,6 +59,8 @@ public class WorkLogController {
     }
     model.addAttribute("info", workLogDto);
     model.addAttribute("memberId", CommonUtils.getSession().getAttribute("loginId").toString());
+    model.addAttribute("fileList", fileService.selectFileList(workLogDto));
+
     return "workLog/view";
   }
 
@@ -175,6 +185,11 @@ public class WorkLogController {
     }
 
     return ResponseDto.builder().result(result).description(description).data(fileUrl).build();
+  }
+
+  @GetMapping("/download/{bbsSeq}/{fileTargetName}")
+  public ResponseEntity<Resource> downloadFormFileBbs(@ModelAttribute FileDto fileDto) throws IOException {
+    return fileService.downloadFile2(fileDto, uploadFileDir);
   }
 
 }
