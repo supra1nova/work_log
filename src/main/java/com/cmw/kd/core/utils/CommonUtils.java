@@ -1,8 +1,13 @@
 package com.cmw.kd.core.utils;
 
 import com.cmw.kd.core.commmonEnum.Role;
+import com.cmw.kd.core.commonDto.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -11,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class CommonUtils {
@@ -49,6 +56,15 @@ public class CommonUtils {
     LocalDateTime date = LocalDateTime.parse(dateStr, formatter);
     // LocalDatetime 객체로부터 날짜/일시 정보를 가져와 지정된 DateTimeFormatter의 패턴으로 변경한 뒤 string으로 리턴
     return date.format(DateTimeFormatter.ofPattern("yy-MM-dd"));
+  }
+
+  public static ResponseEntity<ResponseDto<?>> errorResponseEntityBuilder(BindingResult errors, boolean result, String description, String callback) {
+    final String prefix = "invalid_";
+    Map<String, String> errorMap = new ConcurrentHashMap<>();
+    for(FieldError err: errors.getFieldErrors()){
+      errorMap.put(String.format(prefix + "%s", err.getField()), err.getDefaultMessage());
+    }
+    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ResponseDto.builder().result(result).description(description).invalidMessage(errorMap).callback(callback).build());
   }
 
 }

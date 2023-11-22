@@ -71,12 +71,7 @@ public class WorkLogCalendarController {
     Object data = null;
 
     if (errors.hasErrors()) {
-      final String prefix = "invalid_";
-      Map<String, String> errorMap = new ConcurrentHashMap<>();
-      for(FieldError err: errors.getFieldErrors()){
-        errorMap.put(String.format(prefix + "%s", err.getField()), err.getDefaultMessage());
-      }
-      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ResponseDto.builder().result(result).description(description).invalidMessage(errorMap).callback(callback).build());
+      return CommonUtils.errorResponseEntityBuilder(errors, result, description, callback);
     }
 
     try {
@@ -103,11 +98,9 @@ public class WorkLogCalendarController {
     if (result) {
       description = "작업에 성공했습니다";
       return ResponseEntity.ok(ResponseDto.builder().result(result).description(description).data(data).callback(callback).build());
-//      return ResponseEntity.accepted().body(ResponseDto.builder().result(result).description(description).callback(callback).build());
     }
 
-    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseDto.builder().result(result).description(description).callback(callback).build());
-//    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto.builder().result(result).description(description).callback(callback).build());
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto.builder().result(result).description(description).callback(callback).build());
   }
 
   @GetMapping("/add/{calMonth}")
@@ -124,12 +117,7 @@ public class WorkLogCalendarController {
     String callback = "location.href='/work-log-calendar?calMonth=" + workLogCalendarUpdateDto.getCalMonth() + "'";
 
     if (errors.hasErrors()) {
-      final String prefix = "invalid_";
-      Map<String, String> errorMap = new ConcurrentHashMap<>();
-      for(FieldError err: errors.getFieldErrors()){
-        errorMap.put(String.format(prefix + "%s", err.getField()), err.getDefaultMessage());
-      }
-      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ResponseDto.builder().result(result).description(description).invalidMessage(errorMap).callback(callback).build());
+      return CommonUtils.errorResponseEntityBuilder(errors, result, description, callback);
     }
 
     try {
@@ -141,10 +129,8 @@ public class WorkLogCalendarController {
     if (result) {
       description = "작업에 성공했습니다";
       return ResponseEntity.ok(ResponseDto.builder().result(result).description(description).callback(callback).build());
-//      return ResponseEntity.accepted().body(ResponseDto.builder().result(result).description(description).callback(callback).build());
     }
 
-    return ResponseEntity.internalServerError().body(ResponseDto.builder().result(result).description(description).callback(callback).build());
-//    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto.builder().result(result).description(description).callback(callback).build());
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto.builder().result(result).description(description).callback(callback).build());
   }
 }

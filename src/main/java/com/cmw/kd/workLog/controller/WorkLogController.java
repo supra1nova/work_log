@@ -73,19 +73,13 @@ public class WorkLogController {
   }
 
   @PostMapping("/add")
-  public @ResponseBody ResponseDto<?> addWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto, BindingResult errors){
+  public @ResponseBody ResponseEntity<ResponseDto<?>> addWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto, BindingResult errors){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
     String callback = null;
 
-    if(errors.hasErrors()){
-      final String prefix = "invalid_";
-
-      Map<String, String> errorMap = new ConcurrentHashMap<>();
-      for(FieldError error : errors.getFieldErrors()){
-        errorMap.put(String.format(prefix + "%s", error.getField()), error.getDefaultMessage());
-      }
-      return ResponseDto.builder().result(result).description(description).invalidMessage(errorMap).build();
+    if (errors.hasErrors()) {
+      return CommonUtils.errorResponseEntityBuilder(errors, result, description, callback);
     }
 
     try {
@@ -98,9 +92,10 @@ public class WorkLogController {
     if (result) {
       description = "게시물이 성공적으로 등록되었습니다";
       callback = "location.href='/work-log/view?workLogSeq=" + workLogDto.getWorkLogSeq() + "'";
+      return ResponseEntity.ok(ResponseDto.builder().result(result).description(description).callback(callback).build());
     }
 
-    return ResponseDto.builder().result(result).description(description).callback(callback).build();
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto.builder().result(result).description(description).callback(callback).build());
   }
 
   @GetMapping("/update")
@@ -111,19 +106,13 @@ public class WorkLogController {
   }
 
   @PostMapping("/update")
-  public @ResponseBody ResponseDto<?> updateWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto, BindingResult errors){
+  public @ResponseBody ResponseEntity<ResponseDto<?>> updateWorkLogProc(@Valid @ModelAttribute WorkLogDto workLogDto, BindingResult errors){
     boolean result = false;
     String description = "게시물 등록에 실패했습니다";
     String callback = null;
 
-    if(errors.hasErrors()){
-      final String prefix = "invalid_";
-
-      Map<String, String> errorMap = new ConcurrentHashMap<>();
-      for(FieldError error : errors.getFieldErrors()){
-        errorMap.put(String.format(prefix + "%s", error.getField()), error.getDefaultMessage());
-      }
-      return ResponseDto.builder().result(result).description(description).invalidMessage(errorMap).build();
+    if (errors.hasErrors()) {
+      return CommonUtils.errorResponseEntityBuilder(errors, result, description, callback);
     }
 
     try {
@@ -136,9 +125,10 @@ public class WorkLogController {
     if (result) {
       description = "게시물이 성공적으로 등록되었습니다";
       callback = "location.href='/work-log/view?workLogSeq=" + workLogDto.getWorkLogSeq() + "'";
+      return ResponseEntity.ok(ResponseDto.builder().result(result).description(description).callback(callback).build());
     }
 
-    return ResponseDto.builder().result(result).description(description).callback(callback).build();
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto.builder().result(result).description(description).callback(callback).build());
   }
 
   @PostMapping("/delete")
