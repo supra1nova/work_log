@@ -14,7 +14,7 @@ public interface WorkLogMapper {
 
   List<WorkLogDto> selectWorkLogList(SearchDto searchDto);
 
-  WorkLogDto selectWorkLog(Integer seq);
+  WorkLogDto selectWorkLog(WorkLogVo workLogVo);
 
   int insertWorkLog(WorkLogVo commonVo);
 

@@ -96,7 +96,7 @@
   </script>
 </head>
 <body>
-<jsp:include page="../_include/header.jsp"/>
+<%@ include file="../_include/header.jsp" %>
 
 <div class="container">
   <div>Work-log view page</div>
@@ -138,7 +138,7 @@
 
 
   <div class="tr mb150" >
-    <c:if test="${memberId.equals(info.regId)}">
+    <c:if test="${!empty sessionLoginId && sessionLoginId.equals(info.regId)}">
       <button type="button" onclick="location.href='${pageContext.request.contextPath}/work-log/update?workLogSeq=${info.workLogSeq}'">수정</button>
       <button type="button" id="deleteBtn">삭제</button>
     </c:if>

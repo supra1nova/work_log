@@ -11,7 +11,8 @@
   <div style="display: flex; justify-content: space-between; color: white">
     <%-- TODO: logo image 로 대체 --%>
     <div><a href="/" style="font-size: 50px; color: white">LOGO</a></div>
-    <c:if test="${!empty pageContext.request.getSession('loginId')}">
+      <c:set var="sessionLoginId" value="${pageContext.request.session != null ? pageContext.request.session.getAttribute('loginId') : null}" />
+      <c:if test="${!empty sessionLoginId}">
       <div>
         <a style="margin: 0 10px; color: white; font-weight: bolder" href="/account/view/${pageContext.request.getSession('loginId')}">마이 페이지</a>
         <a style="margin: 0 10px; color: white; font-weight: bolder" href="/auth/logout">로그아웃</a>
