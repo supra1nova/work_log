@@ -35,8 +35,7 @@
             availableToLoadList = false;
 
             const ajaxResult = await getArticleList($('.day-article:last').parent().data('calDate'));
-
-            if(typeof ajaxResult === 'undefined'){
+            if(!ajaxResult.result){
               $('.container').children(':last').height($('.container').children(':last').height() + 100);
               return null;
             }
@@ -138,14 +137,19 @@
       const option = {
         url: '/work-log-calendar/list?calDate=' + calDate,
         dataType: 'json',
-        success: (data, textStatus, xhr) => {
-          if(xhr.status === 204){
-            alert('더 이상 데이터가 존재하지 않습니다')
+        success: data => {
+          if(!data.result){
+            alert('더 이상 데이터가 존재하지 않습니다');
+            return false;
           }
           return data;
         },
-        error: data => {
-          alert(data.description)
+        error: (xhr, textStatus, errorThrown) => {
+          // console.log(xhr)
+          // console.log(textStatus)
+          // console.log(errorThrown)
+          // alert(xhr.description)
+          alert(errorThrown)
           return null;
         },
       }
@@ -166,7 +170,7 @@
         contentType: 'application/json',
         dataType: 'json',
         beforeSend: beforeSend,
-        success: function(data) {
+        success: data => {
           if(data.result) {
             alert(data.description);
             new Function(data.callback)();
@@ -174,9 +178,8 @@
             alert(data.description);
           }
         },
-        error: function(data) {
-          console.log(data);
-          alert(data.description);
+        error: xhr => {
+          alert(xhr.description);
         }
       }
 
@@ -205,15 +208,15 @@
         contentType: 'application/json',
         dataType: 'json',
         beforeSend: beforeSend,
-        success: function(data) {
+        success: data => {
           // controller 에서 result 가 true 가 아니면 모두 에러 처리
           alert(data.description);
           new Function(data.callback)();
         },
-        error: function(data) {
+        error: xhr => {
           // 업데이트 로직에 들어가는 변수는 기본적으로 사용자가 임의 컨트롤 불가 -> invalid message 개별로 띄워줄 필요는 없을 듯
-          alert(data.responseJSON.description);
-          new Function(data.responseJSON.callback)();
+          alert(xhr.responseJSON.description);
+          new Function(xhr.responseJSON.callback)();
         }
       }
 
