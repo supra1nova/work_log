@@ -130,6 +130,17 @@
         <label for="tempFileUpload" style="font-weight: bolder; cursor: pointer">+ 파일 업로드</label>
       </div>
       <div class="addFileList" style="display: flex; flex-direction: column; justify-content: left"></div>
+
+      <%-- single file upload using single input tag--%>
+<%--      <input type="file" name="uploadFileList" id="fileUpload">--%>
+
+      <%-- multiple files upload using single input tag--%>
+<%--      <input type="file" name="uploadFileList" id="fileUpload" multiple>--%>
+
+      <%-- multiple files upload using multiple single input tags --%>
+<%--      <input type="file" name="uploadFileList" >--%>
+<%--      <input type="file" name="uploadFileList" >--%>
+<%--      <input type="file" name="uploadFileList" >--%>
     </div>
   </form>
 

@@ -28,30 +28,30 @@ public class WorkLogCalendarController {
   private final WorkLogCalendarService workLogCalendarService;
 
 //  @GetMapping({"", "/"})
-  public String getWorkLogCalendarList(@ModelAttribute WorkLogCalendarDto workLogCalendarDto, Model model) {
-    List<WorkLogCalendarDto> calendarDtoList = workLogCalendarService.selectWorkLogCalendarListUsingCalMonth(workLogCalendarDto);
-    if(calendarDtoList.isEmpty()) return "redirect:/";
-
-    try {
-      List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarService.selectWorkLogAndCalendarListUsingCalMonth(workLogCalendarDto);
-      String prevMonthValue = workLogCalendarService.selectPrevWorkLogCalendar(workLogCalendarDto);
-      String nextMonthValue = workLogCalendarService.selectNextWorkLogCalendarList(workLogCalendarDto);
-
-      model.addAttribute("calendarList", calendarDtoList);
-      model.addAttribute("list", workLogCalendarDtoList);
-      model.addAttribute("role", CommonUtils.getSession().getAttribute("loginMemberRole").toString());
-
-      model.addAttribute("prevMonth", StringUtils.isNotBlank(prevMonthValue));
-      model.addAttribute("prevMonthValue", prevMonthValue);
-      model.addAttribute("nextMonth", StringUtils.isNotBlank(nextMonthValue));
-      model.addAttribute("nextMonthValue", nextMonthValue);
-    } catch (RuntimeException e) {
-      log.error(e.getMessage());
-      return "redirect:/";
-    }
-
-    return "workLog/calendar-list";
-  }
+//  public String getWorkLogCalendarList(@ModelAttribute WorkLogCalendarDto workLogCalendarDto, Model model) {
+//    List<WorkLogCalendarDto> calendarDtoList = workLogCalendarService.selectWorkLogCalendarListUsingCalMonth(workLogCalendarDto);
+//    if(calendarDtoList.isEmpty()) return "redirect:/";
+//
+//    try {
+//      List<WorkLogCalendarDto> workLogCalendarDtoList = workLogCalendarService.selectWorkLogAndCalendarListUsingCalMonth(workLogCalendarDto);
+//      String prevMonthValue = workLogCalendarService.selectPrevWorkLogCalendar(workLogCalendarDto);
+//      String nextMonthValue = workLogCalendarService.selectNextWorkLogCalendarList(workLogCalendarDto);
+//
+//      model.addAttribute("calendarList", calendarDtoList);
+//      model.addAttribute("list", workLogCalendarDtoList);
+//      model.addAttribute("role", CommonUtils.getSession().getAttribute("loginMemberRole").toString());
+//
+//      model.addAttribute("prevMonth", StringUtils.isNotBlank(prevMonthValue));
+//      model.addAttribute("prevMonthValue", prevMonthValue);
+//      model.addAttribute("nextMonth", StringUtils.isNotBlank(nextMonthValue));
+//      model.addAttribute("nextMonthValue", nextMonthValue);
+//    } catch (RuntimeException e) {
+//      log.error(e.getMessage());
+//      return "redirect:/";
+//    }
+//
+//    return "workLog/calendar-list";
+//  }
 
   @GetMapping({"", "/"})
   public String getWorkLogCalendarListInfinite(@ModelAttribute WorkLogCalendarDto workLogCalendarDto, Model model) {
