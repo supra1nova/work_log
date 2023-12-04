@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmw.kd.simpleBbs.service.SimpleBbsMapper">
+<!--  <sql id="searchClause">-->
+<!--    <if test="searchKeyword != null and !''.equals(searchKeyword)">-->
+<!--      <if test="searchCategory.equals('all')">-->
+<!--        AND (-->
+<!--        MEMBER_ID LIKE CONCAT('%', #{searchKeyword}, '%')-->
+<!--        OR MEMBER_NAME LIKE CONCAT('%', #{searchKeyword}, '%')-->
+<!--        OR MEMBER_EMAIL LIKE CONCAT('%', #{searchKeyword}, '%')-->
+<!--        )-->
+<!--      </if>-->
+<!--      <if test="searchCategory.equals('id')">-->
+<!--        AND MEMBER_ID LIKE CONCAT('%', #{searchKeyword}, '%')-->
+<!--      </if>-->
+<!--      <if test="searchCategory.equals('name')">-->
+<!--        AND MEMBER_NAME LIKE CONCAT('%', #{searchKeyword}, '%')-->
+<!--      </if>-->
+<!--      <if test="searchCategory.equals('email')">-->
+<!--        AND MEMBER_EMAIL LIKE CONCAT('%', #{searchKeyword}, '%')-->
+<!--      </if>-->
+<!--    </if>-->
+<!--  </sql>-->
+
+  <select id="selectSimpleBbsListCount" resultType="int">
+    SELECT COUNT(BBS_SEQ)
+    FROM TB_SIMPLE_BBS
+<!--    <where>-->
+<!--      <include refid="searchClause" />-->
+<!--    </where>-->
+  </select>
+
+  <select id="selectSimpleBbsList" resultType="com.cmw.kd.core.commonDto.CommonDto">
+    SELECT *
+    FROM TB_SIMPLE_BBS
+<!--    <where>-->
+<!--      <include refid="searchClause" />-->
+<!--    </where>-->
+    ORDER BY BBS_GRP DESC, BBS_ORD ASC
+    LIMIT #{pagination.rowNum}, #{pagination.listLimit}
+  </select>
+
+  <insert id="insertSimpleBbs">
+    <selectKey keyProperty="bbsSeq" resultType="int" order="BEFORE">
+      SELECT MAX(BBS_SEQ) + 1 FROM TB_SIMPLE_BBS
+    </selectKey>
+    INSERT INTO TB_SIMPLE_BBS (
+      BBS_SEQ
+    , BBS_TITLE
+    , BBS_CONTENT
+    , REG_ID
+    )
+    VALUES(
+      #{seq}
+    , #{title}
+    , #{content}
+    , #{regId}
+    )
+  </insert>
+
+  <select id="selectSimpleBbs" resultType="com.cmw.kd.core.commonDto.CommonDto">
+    SELECT *
+    FROM TB_SIMPLE_BBS
+    <where>
+      AND REG_ID = #{regId}
+      AND ACTIVE = 'Y'
+    </where>
+  </select>
+
+  <update id="updateSimpleBbs">
+    UPDATE TB_SIMPLE_BBS
+    SET
+      BBS_CONTENT = #{content}
+    WHERE
+      BBS_SEQ = #{seq}
+      AND ACTIVE = 'Y'
+  </update>
+
+  <delete id="deleteSimpleBbs">
+    UPDATE TB_SIMPLE_BBS
+    SET
+    ACTIVE = 'N'
+    WHERE
+      BBS_SEQ = #{seq}
+      AND ACTIVE = 'Y'
+  </delete>
+</mapper>
