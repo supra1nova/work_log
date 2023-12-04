@@ -104,7 +104,8 @@ public class WorkLogCalendarController {
       return ResponseEntity.ok(ResponseDto.builder().result(result).description(description).data(data).callback(callback).build());
     }
 
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto.builder().result(result).description(description).callback(callback).build());
+//    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto.builder().result(result).description(description).callback(callback).build());
+    return ResponseEntity.ok(ResponseDto.builder().result(result).description(description).data(data).callback(callback).build());
   }
 
   @GetMapping("/add/{calMonth}")
