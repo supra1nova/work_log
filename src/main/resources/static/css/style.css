@@ -124,3 +124,16 @@ input[type=checkbox][checked][disabled] {
 .selected {
   color: deepskyblue;
 }
+
+.pagination > ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  width: 800px;
+  margin: 0 auto;
+}
+.pagination > li {
+  width: 50px;
+  padding: 0 5px 0;
+  text-align: center;
+}

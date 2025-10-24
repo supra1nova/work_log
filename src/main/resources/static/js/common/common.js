@@ -2,7 +2,8 @@ const CommonUtils = (() => {
   const finalResult = {};
 
   const formReset = () => {
-    $('form select:first option:first').prop('selected', true);
+    $('#command').reset();
+    $('form select option:first').prop('selected', true);
     $('input[type=text]').val('');
     $('form').submit()
   }

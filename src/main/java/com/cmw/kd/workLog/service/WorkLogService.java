@@ -20,7 +20,7 @@ public class WorkLogService {
   private final WorkLogMapper workLogMapper;
   private final FileService fileService;
   @Value("${custom.work-log-attach-dir-path}")
-  private String attachDirpath;
+  private String attachDirPath;
 
   public int selectWorkLogListCount(SearchDto searchDto){
     return workLogMapper.selectWorkLogListCount(searchDto);
@@ -48,7 +48,7 @@ public class WorkLogService {
       workLogDto.setWorkLogSeq(workLogVo.getWorkLogSeq());
       CommonDto commonDto = new CommonDto();
       commonDto.setMemberInfoAndFileList(workLogDto);
-      fileService.uploadFiles(commonDto, attachDirpath);
+      fileService.uploadFiles(commonDto, attachDirPath);
       return true;
     }
     return false;
